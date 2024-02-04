@@ -1088,10 +1088,10 @@ typedef enum {
 //
 // per-level limits
 //
-#define	MAX_CLIENTS			400		// absolute limit
+#define	MAX_CLIENTS			256		// absolute limit
 #define MAX_LOCATIONS		64
 
-#define	GENTITYNUM_BITS		13		// don't need to send any more
+#define	GENTITYNUM_BITS		12		// don't need to send any more
 #define	MAX_GENTITIES		(1<<GENTITYNUM_BITS)
 
 // entitynums are communicated with GENTITY_BITS, so any reserved
@@ -1115,7 +1115,7 @@ typedef enum {
 
 #define	RESERVED_CONFIGSTRINGS	2	// game can't modify below this, only the system can
 
-#define	MAX_GAMESTATE_CHARS	16000*8
+#define	MAX_GAMESTATE_CHARS	16000*16
 typedef struct {
 	int			stringOffsets[MAX_CONFIGSTRINGS];
 	char		stringData[MAX_GAMESTATE_CHARS];

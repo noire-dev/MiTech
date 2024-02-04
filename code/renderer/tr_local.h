@@ -135,7 +135,7 @@ typedef enum {
 } shaderSort_t;
 
 
-#define MAX_SHADER_STAGES 256
+#define MAX_SHADER_STAGES 64
 
 typedef enum {
 	GF_NONE,
@@ -287,8 +287,8 @@ typedef struct {
 } texModInfo_t;
 
 
-#define MAX_IMAGE_ANIMATIONS		256
-#define MAX_IMAGE_ANIMATIONS_VQ3	256
+#define MAX_IMAGE_ANIMATIONS		64
+#define MAX_IMAGE_ANIMATIONS_VQ3	64
 
 #define LIGHTMAP_INDEX_NONE			0
 #define LIGHTMAP_INDEX_SHADER		1
@@ -913,7 +913,7 @@ void		R_Modellist_f (void);
 #define	MAX_SKINS				1024
 
 
-#define	MAX_DRAWSURFS			0x1000000
+#define	MAX_DRAWSURFS			0x200000
 #define	DRAWSURF_MASK			(MAX_DRAWSURFS-1)
 
 /*
@@ -1864,8 +1864,8 @@ typedef enum {
 // these are sort of arbitrary limits.
 // the limits apply to the sum of all scenes in a frame --
 // the main view, all the 3D icons, etc
-#define	MAX_POLYS		327680
-#define	MAX_POLYVERTS	655360
+#define	MAX_POLYS		65536
+#define	MAX_POLYVERTS	65536*2
 
 // all of the information needed by the back end must be
 // contained in a backEndData_t

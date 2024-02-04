@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 
 // surface geometry should not exceed these limits
-#define	SHADER_MAX_VERTEXES	65536
+#define	SHADER_MAX_VERTEXES	1000*16
 #define	SHADER_MAX_INDEXES	(6*SHADER_MAX_VERTEXES)
 
 
@@ -78,7 +78,7 @@ typedef struct {
 #define	MD3_MAX_TRIANGLES	65535	// per surface
 #define MD3_MAX_VERTS		32768	// per surface
 #define MD3_MAX_SHADERS		256		// per surface
-#define MD3_MAX_FRAMES		4096	// per model
+#define MD3_MAX_FRAMES		1024	// per model
 #define	MD3_MAX_SURFACES	128		// per model
 #define MD3_MAX_TAGS		64		// per frame
 
@@ -330,9 +330,9 @@ typedef struct {
 #define	MAX_MAP_LIGHTGRID	0x800000
 #define	MAX_MAP_VISIBILITY	0x200000
 
-#define	MAX_MAP_DRAW_SURFS	0x800000
-#define	MAX_MAP_DRAW_VERTS	0x800000
-#define	MAX_MAP_DRAW_INDEXES	0x800000
+#define	MAX_MAP_DRAW_SURFS	0x20000*2
+#define	MAX_MAP_DRAW_VERTS	0x80000*2
+#define	MAX_MAP_DRAW_INDEXES	0x80000*2
 
 
 // key / value pair sizes in the entities lump
