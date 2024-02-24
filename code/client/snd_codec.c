@@ -126,6 +126,15 @@ S_CodecInit
 void S_CodecInit( void )
 {
 	codecs = NULL;
+        // Mix3r_Durachok: ogg & opus are added from vkopenarena github repository
+
+        #ifdef USE_CODEC_OPUS
+	        S_CodecRegister(&opus_codec);
+        #endif
+
+        #ifdef USE_CODEC_VORBIS
+	        S_CodecRegister(&ogg_codec);
+        #endif
 
 	// Register wav codec last so that it is always tried first when a file extension was not found
 	S_CodecRegister( &wav_codec );
