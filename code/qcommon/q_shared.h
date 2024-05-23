@@ -964,7 +964,7 @@ struct cvar_s {
 	cvarGroup_t	group;				// to track changes
 };
 
-#define	MAX_CVAR_VALUE_STRING	512
+#define	MAX_CVAR_VALUE_STRING	256
 
 typedef int	cvarHandle_t;
 
