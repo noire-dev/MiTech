@@ -1982,7 +1982,7 @@ static void R_LoadFogs( const lump_t *l, const lump_t *brushesLump, const lump_t
 			fogColor[1] = LERP( fogColor[1], luminance, r_mapGreyScale->value );
 			fogColor[2] = LERP( fogColor[2], luminance, r_mapGreyScale->value );
 		}
-		
+
 		if ( r_mapColorScale->value > 0 ) {
 			float luminance;
 			luminance = LUMA( fogColor[0], fogColor[1], fogColor[2] );

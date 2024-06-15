@@ -321,6 +321,9 @@ static void SV_AddEntitiesVisibleFromPoint( const vec3_t origin, clientSnapshot_
 	int		leafnum;
 	byte	*clientpvs;
 	byte	*bitvector;
+	vec3_t dir;
+	float distanceSquared;
+	float maxViewDistanceSquared;
 
 	// during an error shutdown message we may need to transmit
 	// the shutdown message after the server has shutdown, so
@@ -337,6 +340,8 @@ static void SV_AddEntitiesVisibleFromPoint( const vec3_t origin, clientSnapshot_
 	frame->areabytes = CM_WriteAreaBits( frame->areabits, -1 );
 
 	clientpvs = CM_ClusterPVS (clientcluster);
+
+	maxViewDistanceSquared = (sv_viewdistance->integer*512) * (sv_viewdistance->integer*512);
 
 	for ( e = 0 ; e < svs.currFrame->count; e++ ) {
 		es = svs.currFrame->ents[ e ];
@@ -415,6 +420,17 @@ static void SV_AddEntitiesVisibleFromPoint( const vec3_t origin, clientSnapshot_
 				continue;
 			}
 		}*/
+
+		// calculate distance from the entity to the client
+		VectorSubtract(ent->r.currentOrigin, origin, dir);
+		distanceSquared = VectorLengthSquared(dir);
+
+		// check if the entity is within the max view distance
+		if (distanceSquared > maxViewDistanceSquared) {
+			if (ent->s.eType != ET_PLAYER && ent->s.eType != ET_BEAM && ent->s.eType != ET_MOVER) {
+				continue;
+			}
+		}
 
 		// add it
 		SV_AddIndexToSnapshot( svEnt, e, eNums );
