@@ -311,28 +311,28 @@ typedef struct {
 
 // there shouldn't be any problem with increasing these values at the
 // expense of more memory allocation in the utilities
-#define	MAX_MAP_MODELS		0x1000
-#define	MAX_MAP_BRUSHES		0x8000
-#define	MAX_MAP_ENTITIES	0x1000
+#define	MAX_MAP_MODELS		0x1000*2
+#define	MAX_MAP_BRUSHES		0x8000*2
+#define	MAX_MAP_ENTITIES	0x1000*2
 #define	MAX_MAP_ENTSTRING	0x40000*2
-#define	MAX_MAP_SHADERS		0x1000
+#define	MAX_MAP_SHADERS		0x1000*2
 
 #define	MAX_MAP_AREAS		0x100	// MAX_MAP_AREA_BYTES in q_shared must match!
-#define	MAX_MAP_FOGS		0x100*2
-#define	MAX_MAP_PLANES		0x20000*2
-#define	MAX_MAP_NODES		0x20000*2
-#define	MAX_MAP_BRUSHSIDES	0x20000*2
-#define	MAX_MAP_LEAFS		0x20000*2
-#define	MAX_MAP_LEAFFACES	0x20000*2
-#define	MAX_MAP_LEAFBRUSHES 0x40000*2
-#define	MAX_MAP_PORTALS		0x20000*2
-#define	MAX_MAP_LIGHTING	0x800000*2
-#define	MAX_MAP_LIGHTGRID	0x800000*2
-#define	MAX_MAP_VISIBILITY	0x200000*2
+#define	MAX_MAP_FOGS		0x100*8
+#define	MAX_MAP_PLANES		0x20000*8
+#define	MAX_MAP_NODES		0x20000*8
+#define	MAX_MAP_BRUSHSIDES	0x20000*8
+#define	MAX_MAP_LEAFS		0x20000*8
+#define	MAX_MAP_LEAFFACES	0x20000*8
+#define	MAX_MAP_LEAFBRUSHES 0x40000*8
+#define	MAX_MAP_PORTALS		0x20000*8
+#define	MAX_MAP_LIGHTING	0x800000*8
+#define	MAX_MAP_LIGHTGRID	0x800000*8
+#define	MAX_MAP_VISIBILITY	0x200000*8
 
-#define	MAX_MAP_DRAW_SURFS	0x20000*2
-#define	MAX_MAP_DRAW_VERTS	0x80000*2
-#define	MAX_MAP_DRAW_INDEXES	0x80000*2
+#define	MAX_MAP_DRAW_SURFS	0x20000*8
+#define	MAX_MAP_DRAW_VERTS	0x80000*8
+#define	MAX_MAP_DRAW_INDEXES	0x80000*8
 
 
 // key / value pair sizes in the entities lump
