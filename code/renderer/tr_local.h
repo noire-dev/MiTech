@@ -897,7 +897,7 @@ typedef struct model_s {
 	int			 numLods;
 } model_t;
 
-#define	MAX_MOD_KNOWN	1024
+#define	MAX_MOD_KNOWN	8192
 
 void		R_ModelInit (void);
 model_t		*R_GetModelByHandle( qhandle_t hModel );
