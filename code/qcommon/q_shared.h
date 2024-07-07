@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // q_shared.h -- included first by ALL program modules.
 // A user mod should never modify this file
 
-#define Q3_VERSION            "MiTech 2.2"
+#define Q3_VERSION            "MiTech 2.3"
 #ifndef SVN_VERSION
   #define SVN_VERSION Q3_VERSION
 #endif
@@ -1091,7 +1091,7 @@ typedef enum {
 #define	MAX_CLIENTS			256		// absolute limit
 #define MAX_LOCATIONS		64
 
-#define	GENTITYNUM_BITS		12		// don't need to send any more
+#define	GENTITYNUM_BITS		14		// don't need to send any more
 #define	MAX_GENTITIES		(1<<GENTITYNUM_BITS)
 
 // entitynums are communicated with GENTITY_BITS, so any reserved

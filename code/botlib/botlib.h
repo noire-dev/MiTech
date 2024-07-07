@@ -445,7 +445,7 @@ name:						default:			module(s):			description:
 
 "log"						"0"					l_log.c				enable/disable creating a log file
 "maxclients"				"4"					be_interface.c		maximum number of clients
-"maxentities"				"4096"				be_interface.c		maximum number of entities
+"maxentities"				"16384"				be_interface.c		maximum number of entities
 "bot_developer"				"0"					be_interface.c		bot developer mode (it's "botDeveloper" in C to prevent symbol clash).
 
 "phys_friction"				"6"					be_aas_move.c		ground friction
