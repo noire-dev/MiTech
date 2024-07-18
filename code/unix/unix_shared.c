@@ -71,6 +71,15 @@ int Sys_Milliseconds( void )
 	return curtime;
 }
 
+/*
+ = *=============
+ Sys_Cmd
+ ==============
+ */
+void Sys_Cmd( const char *command )
+{
+	system(va("%s", command));
+}
 
 char *strlwr( char *s ) {
   if ( s==NULL ) { // bk001204 - paranoia

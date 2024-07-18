@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // q_shared.h -- included first by ALL program modules.
 // A user mod should never modify this file
 
-#define Q3_VERSION            "MiTech 2.3"
+#define Q3_VERSION            "MiTech 3.2"
 #ifndef SVN_VERSION
   #define SVN_VERSION Q3_VERSION
 #endif
@@ -36,18 +36,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 //#define DEFAULT_GAME			"edawn"
 
-#define BASEGAME				"MiLab"
-#define BASEDEMO				"MiLabT"
-#define BASETA					"MiLabC"
-#define STEAMPATH_NAME			"MiTech"
+#define BASEGAME				"milab"
+#define BASEDEMO				"milabt"
+#define BASETA					"milabc"
+#define STEAMPATH_NAME			"mitech"
 #define STEAMPATH_APPID			"2207"
 #define	STANDALONE				1
 
 #define MAX_TEAMNAME            32
 #define MAX_MASTER_SERVERS      5	// number of supported master servers
 
-#define GAMENAME_FOR_MASTER		"MiTech"
-#define HEARTBEAT_FOR_MASTER	"MiTech"
+#define GAMENAME_FOR_MASTER		"mitech"
+#define HEARTBEAT_FOR_MASTER	"mitech"
 
 #define DEMOEXT	"dm_"			// standard demo extension
 

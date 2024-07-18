@@ -39,7 +39,7 @@ USE_VULKAN_API   = 1
 USE_RENDERER_DLOPEN = 0
 
 # valid options: opengl, vulkan, opengl2
-RENDERER_DEFAULT = vulkan
+RENDERER_DEFAULT = opengl
 
 CNAME            = qsand_$(RENDERER_DEFAULT)
 DNAME            = qsand_server
