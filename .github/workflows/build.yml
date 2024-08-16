@@ -43,7 +43,7 @@ jobs:
             rule: install
 
           - btype: Debug
-            rule: debug install
+            rule: debug
 
     defaults:
       run:
@@ -154,7 +154,7 @@ jobs:
 
           - btype: Debug
             if: ${{ github.event_name != 'release' }}
-            rule: debug install
+            rule: debug
 
           - arch: x86
             use_sdl: USE_SDL=0
@@ -208,7 +208,7 @@ jobs:
             rule: install
 
           - btype: Debug
-            rule: debug install
+            rule: debug
 
     steps:
 
@@ -257,7 +257,7 @@ jobs:
             rule: install
 
           - btype: Debug
-            rule: debug install
+            rule: debug
 
     steps:
 
