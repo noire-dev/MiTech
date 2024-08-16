@@ -3411,6 +3411,8 @@ static void Sys_GetProcessorId( char *vendor )
 
 #else // not _WIN32
 
+#ifndef __APPLE__
+
 #include <sys/auxv.h>
 
 #if arm32
@@ -3464,6 +3466,8 @@ static void Sys_GetProcessorId( char *vendor )
 #endif
 #endif
 }
+
+#endif // !__APPLE__
 
 #endif // !_WIN32
 
@@ -3802,6 +3806,7 @@ void Com_Init( char *commandLine ) {
 
 	// CPU detection
 	Cvar_Get( "sys_cpustring", "detect", CVAR_PROTECTED | CVAR_ROM | CVAR_NORESTART );
+#ifndef __APPLE__
 	if ( !Q_stricmp( Cvar_VariableString( "sys_cpustring" ), "detect" ) )
 	{
 		char vendor[128];
@@ -3809,6 +3814,7 @@ void Com_Init( char *commandLine ) {
 		Sys_GetProcessorId( vendor );
 		Cvar_Set( "sys_cpustring", vendor );
 	}
+#endif
 	Com_Printf( "%s\n", Cvar_VariableString( "sys_cpustring" ) );
 
 #ifdef USE_AFFINITY_MASK
