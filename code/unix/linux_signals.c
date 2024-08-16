@@ -51,7 +51,7 @@ static void signal_handler( int sig )
 	printf( "Received signal %d, exiting...\n", sig );
 
 #ifdef _DEBUG
-	if ( sig == SIGSEGV || sig == SIGILL || sig == SIGBUS )
+	//if ( sig == SIGSEGV || sig == SIGILL || sig == SIGBUS )
 	{
 		void *syms[10];
 		const size_t size = backtrace( syms, ARRAY_LEN( syms ) );
