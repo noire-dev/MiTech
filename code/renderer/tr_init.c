@@ -182,6 +182,9 @@ cvar_t	*r_marksOnTriangleMeshes;
 cvar_t	*r_aviMotionJpegQuality;
 cvar_t	*r_screenshotJpegQuality;
 
+cvar_t	*r_fogDepth;
+cvar_t	*r_fogColor;
+
 static cvar_t *r_maxpolys;
 static cvar_t* r_maxpolyverts;
 int		max_polys;
@@ -1511,6 +1514,9 @@ static void R_Register( void )
 	r_mapGreyScale = ri.Cvar_Get( "r_mapGreyScale", "0", CVAR_ARCHIVE | CVAR_LATCH );
 	ri.Cvar_CheckRange( r_mapGreyScale, "-1", "1", CV_FLOAT );
 	ri.Cvar_SetDescription(r_mapGreyScale, "Desaturate world map textures only, works independently from \\r_greyscale, negative values only desaturate lightmaps.");
+
+	r_fogColor = ri.Cvar_Get("r_fogColor", "0x00000000", CVAR_ARCHIVE_ND );
+	r_fogDepth = ri.Cvar_Get("r_fogDepth", "", CVAR_ARCHIVE_ND );
 
 	r_mapColorScale = ri.Cvar_Get( "r_mapColorScale", "0", CVAR_LATCH );
 	r_mapColorRed = ri.Cvar_Get( "r_mapColorRed", "1", CVAR_LATCH );

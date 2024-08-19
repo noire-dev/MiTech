@@ -1321,6 +1321,9 @@ extern	cvar_t	*r_printShaders;
 
 extern cvar_t	*r_marksOnTriangleMeshes;
 
+extern cvar_t	*r_fogDepth;
+extern cvar_t	*r_fogColor;
+
 //====================================================================
 
 void R_SwapBuffers( int );
