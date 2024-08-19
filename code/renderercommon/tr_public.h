@@ -83,8 +83,8 @@ typedef struct {
 		float s1, float t1, float s2, float t2, qhandle_t hShader );	// 0 = white
 
 	// Draw images for cinematic rendering, pass as 32 bit rgba
-	void	(*DrawStretchRaw)( int x, int y, int w, int h, int cols, int rows, byte *data, int client, qboolean dirty );
-	void	(*UploadCinematic)( int w, int h, int cols, int rows, byte *data, int client, qboolean dirty );
+	void	(*DrawStretchRaw)( int x, int y, int w, int h, int cols, int rows, const byte *data, int client, qboolean dirty );
+	void	(*UploadCinematic)( int w, int h, int cols, int rows, const byte *data, int client, qboolean dirty );
 
 	void	(*BeginFrame)( stereoFrame_t stereoFrame );
 
@@ -120,7 +120,12 @@ typedef struct {
 
 	void	(*VertexLighting)( qboolean allowed );
 	void	(*SyncRender)( void );
-
+#ifdef __WASM__
+	void	(*InitShaders)( void );
+#endif
+#if defined(__WASM__)
+	void	(*FinishImage3)(void *, byte *pic, int picFormat, int numMips);
+#endif
 
 } refexport_t;
 

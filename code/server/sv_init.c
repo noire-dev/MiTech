@@ -905,10 +905,12 @@ void SV_Shutdown( const char *finalmsg ) {
 
 	Com_Printf( "---------------------------\n" );
 
+#ifndef __WASM__
 #ifndef DEDICATED
 	// disconnect any local clients
 	if ( sv_killserver->integer != 2 )
 		CL_Disconnect( qfalse );
+#endif
 #endif
 
 	// clean some server cvars

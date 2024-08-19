@@ -53,5 +53,11 @@ extern botlib_import_t botimport;
 extern int botDeveloper;					//true if developer is on
 
 //
+#ifndef __WASM__
 int Sys_MilliSeconds(void);
+#else
+extern int Sys_Milliseconds(void);
+#define Sys_MilliSeconds Sys_Milliseconds
+#endif
+
 

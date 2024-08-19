@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #include "tr_local.h"
 
+void R_AddPalette(const char *name, int a, int r, int g, int b);
+
 // tr_shader.c -- this file deals with the parsing and definition of shaders
 
 static char *s_shaderText;
@@ -35,7 +37,38 @@ static	shader_t		shader;
 static	texModInfo_t	texMods[MAX_SHADER_STAGES][TR_MAX_TEXMODS];
 
 #define FILE_HASH_SIZE		1024
-static	shader_t*		hashTable[FILE_HASH_SIZE];
+#ifndef __WASM__
+static	
+#else
+Q_EXPORT
+#endif
+shader_t*		hashTable[FILE_HASH_SIZE];
+
+#if 0
+// well at least I learned something, that RE_RegisterShaderFromImage
+//   is maybe missing animations or time?
+// CODE REVIEW: generalize this somehow? easier than EMscripten?
+Q_EXPORT void R_ReplaceShaders(image_t *image) {
+	int hash;
+	shader_t *sh;
+	int s;
+	shaderStage_t *stage;
+	for(hash = 0; hash < 1024 /* FILE_HASH_SIZE */; hash++) {
+	for (sh = hashTable[hash]; sh; sh = sh->next) {
+		for(s = 0; s < 8; s++) {
+			if((stage = sh->stages[s])) {
+				/* image[0] is in first slot */
+				if(sh->stages[s]->bundle[0].image[0] == image) {
+					sh->remappedShader = tr.shaders[RE_RegisterShaderFromImage(va("%s_loaded", sh->name), sh->lightmapIndex, image, qfalse)];
+				}
+			}
+		}
+	}
+}
+
+
+}
+#endif
 
 #define MAX_SHADERTEXT_HASH		2048
 static const char **shaderTextHashTable[MAX_SHADERTEXT_HASH];
@@ -2239,6 +2272,109 @@ static qboolean ParseShader( const char **text )
 
 			continue;
 		}
+		// parse palette colors for filename
+    else if ( !Q_stricmp( token, "palette" ) ) {
+      char file[MAX_OSPATH];
+      token = COM_ParseExt( text, qfalse );
+      memcpy(file, token, sizeof(file));
+      const char *colors = COM_ParseExt( text, qfalse );
+      char color[4];
+      int a = 0, r = 0, g = 0, b = 0;
+      int ci = 0;
+      int ri2 = 0;
+      int gi = 0;
+      int bi = 0;
+      for(int i = 0; i < 12; i++) {
+        if(colors[i] == ',') {
+          if(ri2 == 0) {
+            color[ci] = 0;
+            a = atoi(color);
+            ri2 = i + 1;
+          } else if(gi == 0) {
+            color[ci] = 0;
+            r = atoi(color);
+            gi = i + 1;
+				} else {
+            color[ci] = 0;
+						g = atoi(color);
+            bi = i + 1;
+            b = atoi(&colors[bi]);
+            break;
+					}
+          ci = 0;
+        } else if (colors[i] >= '0' && colors[i] <= '9') {
+          color[ci] = colors[i];
+          ci++;
+				}
+			}
+      R_AddPalette(file, a, r, g, b);
+			continue;
+		}
+    else if (!Q_stricmp( token, "translucent" ) )
+		{
+			shader.contentFlags |= CONTENTS_TRANSLUCENT;
+			continue;
+		}
+		else if (!Q_stricmp( token, "twosided" ) )
+		{
+			shader.cullType = CT_TWO_SIDED;
+			continue;
+		}
+    // ydnar: implicit default mapping to eliminate redundant/incorrect explicit shader stages
+		else if ( !Q_stricmpn( token, "implicit", 8 ) ) {
+      if ( s >= MAX_SHADER_STAGES ) {
+				ri.Printf( PRINT_WARNING, "WARNING: too many stages in shader %s (max is %i)\n", shader.name, MAX_SHADER_STAGES );
+				return qfalse;
+			}
+
+			// set implicit mapping state
+			if ( !Q_stricmp( token, "implicitBlend" ) ) {
+				stages[s].stateBits &= GLS_DEPTHMASK_TRUE | GLS_SRCBLEND_SRC_ALPHA | GLS_DSTBLEND_ONE_MINUS_SRC_ALPHA;
+				shader.cullType = CT_TWO_SIDED;
+			} else if ( !Q_stricmp( token, "implicitMask" ) )     {
+				stages[s].stateBits &= GLS_DEPTHMASK_TRUE | GLS_ATEST_GE_80;
+				shader.cullType = CT_TWO_SIDED;
+			} else    // "implicitMap"
+			{
+				stages[s].stateBits &= GLS_DEPTHMASK_TRUE;
+				shader.cullType = CT_FRONT_SIDED;
+			}
+      stages[s].active = qtrue;
+			s++;
+
+      // get image
+      token = COM_ParseExt( text, qfalse );
+      if ( token[ 0 ] != '\0' && token[ 0 ] != '-' ) {
+        const char	*stageText = va("\nmap %s\n}", token);
+        if ( !ParseStage( &stages[s], &stageText ) )
+        {
+          stages[s].active = qfalse;
+          continue;
+        }
+      } else
+      {
+        const char	*stageText = va("\nmap %s.tga\n}", shader.name);
+        if ( !ParseStage( &stages[s], &stageText ) )
+        {
+          stages[s].active = qfalse;
+          continue;
+        }
+      }
+      stages[s].active = qtrue;
+
+			continue;
+		}
+    else if ( !Q_stricmp( token, "dpoffsetmapping" )
+      || !Q_stricmp(token, "dp_refract")
+			|| !Q_stricmp(token, "dpglossexponentmod")
+      || !Q_stricmp(token, "dpglossintensitymod")
+			|| !Q_stricmp(token, "dp_camera")
+      || !Q_stricmp(token, "nolightmap")
+			|| !Q_stricmp(token, "xon_nowarn")
+		  || !Q_stricmp(token, "dpreflectcube")
+		  || !Q_stricmp(token, "dp_water")) {
+			SkipRestOfLine(text);
+		}
 		else
 		{
 			ri.Printf( PRINT_WARNING, "WARNING: unknown general shader parameter '%s' in '%s'\n", token, shader.name );
@@ -4130,6 +4266,13 @@ static void ScanAndLoadShaderFiles( void )
 
 		SkipBracedSection(&p, 0);
 	}
+
+	const char *shaderText = FindShaderInShaderText("palettes/default");
+	if ( !shaderText ) {
+    ri.Printf(PRINT_WARNING, "Error: parsing default palette\n");
+  } else {
+    ParseShader( &shaderText );
+  }
 }
 
 

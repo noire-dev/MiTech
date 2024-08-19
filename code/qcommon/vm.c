@@ -269,11 +269,20 @@ VM_Init
 ==============
 */
 void VM_Init( void ) {
+#ifdef __WASM__ 
+// HAS_VM_COMPILED?
+#ifndef DEDICATED
+	Cvar_Get( "vm_ui", "1", CVAR_ARCHIVE | CVAR_PROTECTED );	// !@# SHIP WITH SET TO 2
+	Cvar_Get( "vm_cgame", "1", CVAR_ARCHIVE | CVAR_PROTECTED );	// !@# SHIP WITH SET TO 2
+#endif
+	Cvar_Get( "vm_game", "1", CVAR_ARCHIVE | CVAR_PROTECTED );	// !@# SHIP WITH SET TO 2
+#else
 #ifndef DEDICATED
 	Cvar_Get( "vm_ui", "2", CVAR_ARCHIVE | CVAR_PROTECTED );	// !@# SHIP WITH SET TO 2
 	Cvar_Get( "vm_cgame", "2", CVAR_ARCHIVE | CVAR_PROTECTED );	// !@# SHIP WITH SET TO 2
 #endif
 	Cvar_Get( "vm_game", "2", CVAR_ARCHIVE | CVAR_PROTECTED );	// !@# SHIP WITH SET TO 2
+#endif
 
 	Cmd_AddCommand( "vmprofile", VM_VmProfile_f );
 	Cmd_AddCommand( "vminfo", VM_VmInfo_f );
@@ -1925,6 +1934,9 @@ locals from sp
 ==============
 */
 
+#ifdef __WASM__
+Q_EXPORT
+#endif
 intptr_t QDECL VM_Call( vm_t *vm, int nargs, int callnum, ... )
 {
 	//vm_t	*oldVM;

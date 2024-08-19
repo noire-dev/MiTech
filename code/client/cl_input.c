@@ -367,7 +367,28 @@ static void CL_KeyMove( usercmd_t *cmd ) {
 CL_MouseEvent
 =================
 */
-void CL_MouseEvent( int dx, int dy /*, int time*/ ) {
+#ifdef __WASM__
+void CL_MouseEvent( int dx, int dy, qboolean absolute ) 
+#else
+void CL_MouseEvent( int dx, int dy /*, int time*/ ) 
+#endif
+{
+#ifdef __WASM__
+	if( absolute ) {
+		if ( Key_GetCatcher() & KEYCATCH_UI ) {
+			VM_Call( uivm, 3, UI_MOUSE_EVENT, -10000, -10000 );
+		} else if ( Key_GetCatcher() & KEYCATCH_CGAME ) {
+			VM_Call( cgvm, 3, CG_MOUSE_EVENT, -10000, -10000 );
+		}
+		if ( Key_GetCatcher() & KEYCATCH_UI ) {
+			VM_Call( uivm, 3, UI_MOUSE_EVENT, dx, dy, qtrue );
+		} else if ( Key_GetCatcher() & KEYCATCH_CGAME ) {
+			VM_Call( cgvm, 3, CG_MOUSE_EVENT, dx, dy, qtrue );
+		}
+		return;
+	}
+#endif
+
 	if ( Key_GetCatcher() & KEYCATCH_UI ) {
 		VM_Call( uivm, 2, UI_MOUSE_EVENT, dx, dy );
 	} else if ( Key_GetCatcher() & KEYCATCH_CGAME ) {

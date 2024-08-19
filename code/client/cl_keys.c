@@ -172,7 +172,24 @@ static void Field_Paste( field_t *edit ) {
 	char	*cbd;
 	int		pasteLen, i;
 
+#ifdef __WASM__
+	// because this happens asynchronously, the char events are created when the browser keypress event fires
+	//   all this does is set the field now, so that when something is pasted it can be send to playername
+	//   or console, etc.
+	// this is called a second time by the browser when the text is ready
+	static field_t *previousEdit = NULL;
+
+	if(edit) {
+		cbd = (void *)edit;
+		edit = previousEdit;
+		previousEdit = NULL;
+	} else {
+		previousEdit = edit;
+		return;
+	}
+#else
 	cbd = Sys_GetClipboardData();
+#endif
 
 	if ( !cbd ) {
 		return;
@@ -562,6 +579,29 @@ static void CL_KeyDownEvent( int key, unsigned time )
 	}
 #endif
 
+#ifdef __WASM__
+extern	qboolean	first_click;
+void S_SoundInfo( void );
+qboolean SNDDMA_Init( void );
+extern qboolean s_soundStarted;
+extern qboolean s_soundMuted;
+
+	if(key == K_MOUSE1 && first_click) {
+		first_click = qfalse;
+    SNDDMA_Init();
+    gw_active = qtrue;
+    s_soundStarted = qtrue;
+    s_soundMuted = qfalse;
+    S_SoundInfo();
+		// TODO: all the sounds that successfully loaded before the first click
+		//   get wiped, but all the sounds that load after are correct,
+		// Turning this off, all the sounds that load successfully before have
+		//   the wrong IDs, and all the sounds loaded after refer to the wrong ID also
+    S_BeginRegistration();
+	}
+
+#endif
+
 	// console key is hardcoded, so the user can never unbind it
 	if ( key == K_CONSOLE || ( keys[K_SHIFT].down && key == K_ESCAPE ) ) {
 		Con_ToggleConsole_f();
@@ -721,7 +761,11 @@ CL_KeyEvent
 Called by the system for both key up and key down events
 ===================
 */
+#ifdef __WASM__
+void CL_KeyEvent( int key, qboolean down, unsigned time, int finger )
+#else
 void CL_KeyEvent( int key, qboolean down, unsigned time )
+#endif
 {
 	if ( down )
 		CL_KeyDownEvent( key, time );
@@ -778,7 +822,11 @@ void Key_ClearStates( void )
 	for ( i = 0 ; i < MAX_KEYS ; i++ )
 	{
 		if ( keys[i].down )
+#ifdef __WASM__
+			CL_KeyEvent( i, qfalse, 0, 0 );
+#else
 			CL_KeyEvent( i, qfalse, 0 );
+#endif
 
 		keys[i].down = qfalse;
 		keys[i].repeats = 0;

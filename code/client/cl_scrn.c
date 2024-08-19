@@ -592,6 +592,11 @@ static void SCR_DrawScreenField( stereoFrame_t stereoFrame ) {
 }
 
 
+
+#ifndef __WASM__
+extern cvar_t *r_headless;
+#endif
+
 /*
 ==================
 SCR_UpdateScreen
@@ -613,6 +618,15 @@ void SCR_UpdateScreen( void ) {
 		if ( next_frametime && ms - next_frametime < 0 ) {
 			re.ThrottleBackend();
 		} else {
+
+#ifdef __WASM__
+	if(!gw_minimized) {
+		// don't ask game or UI to draw if the window is unfocused
+		//   otherwise it will freeze when the user switches back to
+		//   catch up with all the render commands it missed in the background
+		next_frametime = ms + 100; // limit to 60 FPS
+	} else 
+#endif
 			next_frametime = ms + 16; // limit to 60 FPS
 		}
 	} else {
@@ -623,11 +637,22 @@ void SCR_UpdateScreen( void ) {
 	if ( ++recursive > 2 ) {
 		Com_Error( ERR_FATAL, "SCR_UpdateScreen: recursively called" );
 	}
+#ifdef USE_SDL
+#ifndef __WASM__
+	// don't draw frames out of sequence in headless mode, only the frames requested
+	//   TODO: might prevent loading screens from being rendered in demo files?
+	if(r_headless->integer && recursive > 1) {
+		return;
+	}
+#endif
+#endif
 	recursive = 1;
 
 	// If there is no VM, there are also no rendering commands issued. Stop the renderer in
 	// that case.
+#ifndef __WASM__
 	if ( uivm )
+#endif
 	{
 		// XXX
 		int in_anaglyphMode = Cvar_VariableIntegerValue("r_anaglyphMode");

@@ -68,7 +68,21 @@ typedef struct image_s {
 
 	imgType_t	type;
 	imgFlags_t	flags;
+	int			lastTimeUsed;
+	char variables[MAX_QPATH];
+	struct image_s *palette;
+	struct image_s *alternate;
 } image_t;
+
+typedef struct palette_s {
+	char		*imgName;
+	struct palette_s *next;
+	int  a;
+	int  r;
+	int  g;
+	int  b;
+	struct image_s *image;
+} palette_t;
 
 // any change in the LIGHTMAP_* defines here MUST be reflected in
 // R_FindShader() in tr_bsp.c

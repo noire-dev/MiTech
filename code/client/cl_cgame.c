@@ -438,6 +438,13 @@ static qboolean CL_GetValue( char* value, int valueSize, const char* key ) {
 		return qtrue;
 	}
 
+#ifdef __WASM__
+	if ( !Q_stricmp( key, "trap_GetAsyncFiles" ) ) {
+		Com_sprintf( value, valueSize, "%i", CG_GETASYNCFILES );
+		return qtrue;
+	}
+#endif
+
 	return qfalse;
 }
 
@@ -452,6 +459,11 @@ static void CL_ForceFixedDlights( void ) {
 }
 
 
+#ifdef __WASM__
+int FS_GetAsyncFiles(const char **files, int max);
+extern qboolean fs_cgameSawAsync;
+#endif
+
 /*
 ====================
 CL_CgameSystemCalls
@@ -465,6 +477,17 @@ static intptr_t CL_CgameSystemCalls( intptr_t *args ) {
 		Com_Printf( "%s", (const char*)VMA(1) );
 		return 0;
 	case CG_ERROR:
+#ifdef __WASM__
+		// BECAUSE WE CONVERT FILE TYPES TO .PNG, CLASSIC
+		//   GAME FAILS WHEN THE SKIN FILE CHECKS FOR 
+		//   A DEFAULT_ICON.TGA. NO OPTION TO CHANGE 
+		//   IMAGE TYPES BECAUSE TGA IS HARD-CODED.
+		// IGNORE THIS ERROR AND HOPE CGAME DOESN'T
+		//   REACT POORLY.
+		if(Q_stristr((const char*)VMA(1), "DEFAULT_MODEL")) {
+			return 0;
+		}
+#endif
 		Com_Error( ERR_DROP, "%s", (const char*)VMA(1) );
 		return 0;
 	case CG_MILLISECONDS:
@@ -788,6 +811,13 @@ static intptr_t CL_CgameSystemCalls( intptr_t *args ) {
 	case CG_TRAP_GETVALUE:
 		VM_CHECKBOUNDS( cgvm, args[1], args[2] );
 		return CL_GetValue( VMA(1), args[2], VMA(3) );
+
+#ifdef __WASM__
+	case CG_GETASYNCFILES:
+		fs_cgameSawAsync = qtrue;
+		return FS_GetAsyncFiles(VMA(1), args[2]);
+		break;
+#endif
 
 	default:
 		Com_Error( ERR_DROP, "Bad cgame system trap: %ld", (long int) args[0] );

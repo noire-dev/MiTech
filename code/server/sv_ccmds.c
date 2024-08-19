@@ -172,6 +172,13 @@ static void SV_Map_f( void ) {
 	len = FS_FOpenFileRead( expanded, NULL, qfalse );
 	FS_RestorePure();
 	if ( len == -1 ) {
+#ifdef __WASM__
+		qboolean	CL_Download( const char *cmd, const char *pakname, qboolean autoDownload );
+		static char alreadyTried[MAX_OSPATH];
+		if(Q_stricmp(alreadyTried, map) != 0 && CL_Download( Cmd_Argv(0), map, qtrue )) {
+			Q_strncpyz(alreadyTried, map, sizeof(alreadyTried));
+		} else
+#endif
 		Com_Printf( "Can't find map %s\n", expanded );
 		return;
 	}
