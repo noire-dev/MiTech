@@ -2969,7 +2969,11 @@ int Com_EventLoop( void ) {
 		switch ( ev.evType ) {
 #ifndef DEDICATED
 		case SE_KEY:
+#ifdef __WASM__
 			CL_KeyEvent( ev.evValue, ev.evValue2, ev.evTime, 0 );
+#else
+			CL_KeyEvent( ev.evValue, ev.evValue2, ev.evTime );
+#endif
 			break;
 		case SE_CHAR:
 			CL_CharEvent( ev.evValue );

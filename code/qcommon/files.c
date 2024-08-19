@@ -4962,9 +4962,11 @@ static void FS_CheckIdPaks( void )
 #ifndef __WASM__
 		if(!fs_gamedirvar->string[0]
 		|| !Q_stricmp( fs_gamedirvar->string, BASEGAME )
-		|| !Q_stricmp( fs_gamedirvar->string, BASETA ))
+		|| !Q_stricmp( fs_gamedirvar->string, BASETA )) {
 			Com_Error(ERR_FATAL, "\n*** you need to install Quake III Arena in order to play ***");
+		}
 #endif
+	}
 }
 #endif
 
@@ -5980,3 +5982,5 @@ void *FS_LoadLibrary( const char *name )
 
 	return libHandle;
 }
+
+
