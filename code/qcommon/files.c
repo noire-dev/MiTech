@@ -5089,9 +5089,6 @@ const char *FS_ReferencedPakChecksums( void ) {
 			if ( search->pack->exclude ) {
 				continue;
 			}
-#ifndef __WASM__
-			if ( search->pack->referenced || !FS_IsBaseGame( search->pack->pakGamename ) ) {
-#endif
 #if defined(USE_ALTCHECKSUM) || defined(__WASM__)
 				found = qfalse;
 				// serve the original checksum if running the server from the web
@@ -5111,9 +5108,6 @@ const char *FS_ReferencedPakChecksums( void ) {
 #endif
 				Q_strcat( info, sizeof( info ), va( "%i ", search->pack->checksum ) );
 #if defined(USE_ALTCHECKSUM) || defined(__WASM__)
-			}
-#endif
-#ifndef __WASM__
 			}
 #endif
 		}
@@ -5340,17 +5334,11 @@ const char *FS_ReferencedPakNames( void ) {
 			if ( search->pack->exclude ) {
 				continue;
 			}
-#ifndef __WASM__
-			if ( search->pack->referenced || !FS_IsBaseGame( search->pack->pakGamename ) ) {
-#endif
-				pakName = va( "%s/%s", search->pack->pakGamename, search->pack->pakBasename );
-				if ( *info != '\0' ) {
-					Q_strcat( info, sizeof( info ), " " );
-				}
-				Q_strcat( info, sizeof( info ), pakName );
-#ifndef __WASM__
+			pakName = va( "%s/%s", search->pack->pakGamename, search->pack->pakBasename );
+			if ( *info != '\0' ) {
+				Q_strcat( info, sizeof( info ), " " );
 			}
-#endif
+			Q_strcat( info, sizeof( info ), pakName );
 		}
 	}
 

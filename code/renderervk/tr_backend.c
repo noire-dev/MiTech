@@ -1060,7 +1060,7 @@ Stretches a raw 32 bit power of 2 bitmap image over the given screen rectangle.
 Used for cinematics.
 =============
 */
-void RE_StretchRaw( int x, int y, int w, int h, int cols, int rows, byte *data, int client, qboolean dirty ) {
+void RE_StretchRaw( int x, int y, int w, int h, int cols, int rows, const byte *data, int client, qboolean dirty ) {
 	int			i, j;
 	int			start, end;
 
@@ -1095,7 +1095,7 @@ void RE_StretchRaw( int x, int y, int w, int h, int cols, int rows, byte *data, 
 }
 
 
-void RE_UploadCinematic( int w, int h, int cols, int rows, byte *data, int client, qboolean dirty ) {
+void RE_UploadCinematic( int w, int h, int cols, int rows, const byte *data, int client, qboolean dirty ) {
 
 	image_t *image;
 
