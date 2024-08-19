@@ -2975,7 +2975,11 @@ int Com_EventLoop( void ) {
 			CL_CharEvent( ev.evValue );
 			break;
 		case SE_MOUSE:
+#ifdef __WASM__
 			CL_MouseEvent( ev.evValue, ev.evValue2 /*, ev.evTime*/, qfalse );
+#else
+			CL_MouseEvent( ev.evValue, ev.evValue2 /*, ev.evTime*/ );
+#endif
 			break;
 #ifdef __WASM__
 		case SE_MOUSE_ABS:
