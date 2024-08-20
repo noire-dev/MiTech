@@ -1339,7 +1339,8 @@ static void RB_IterateStagesVBO( const shaderCommands_t *input )
 
 	fogPass = ( tess.fogNum && tess.shader->fogPass );
 
-	if ( fogPass && tess.shader->numUnfoggedPasses == 1 ) {
+	if ( fogPass && tess.shader->numUnfoggedPasses == 1 
+		&& (tess.fogNum > 1 || r_fogDepth->integer)) {
 		// combined fog + single stage program
 		pStage = input->xstages[ 0 ];
 		fparm = VBO_SetupFog( pStage->vboVPindex[1], pStage->vboFPindex[1], &vp, &fp ); 

@@ -827,10 +827,18 @@ void RB_CalcFogTexCoords( float *st ) {
 	fogDistanceVector[3] = DotProduct( local, backEnd.viewParms.or.axis[0] );
 
 	// scale the fog vectors based on the fog's thickness
+if(tess.fogNum == 1 /* && !(tess.shader->surfaceFlags & SURF_NOLIGHTMAP) */) {
+	float depth = 1.0f / ( r_fogDepth->value * 8 );
+	fogDistanceVector[0] *= depth;
+	fogDistanceVector[1] *= depth;
+	fogDistanceVector[2] *= depth;
+	fogDistanceVector[3] *= depth;
+} else {
 	fogDistanceVector[0] *= fog->tcScale;
 	fogDistanceVector[1] *= fog->tcScale;
 	fogDistanceVector[2] *= fog->tcScale;
 	fogDistanceVector[3] *= fog->tcScale;
+}
 
 	// rotate the gradient vector for this orientation
 	if ( fog->hasSurface ) {
@@ -894,6 +902,7 @@ RB_CalcFogProgramParms
 const fogProgramParms_t *RB_CalcFogProgramParms( void )
 {
 	static fogProgramParms_t parm;
+	static vec4_t defaultFog;
 	const fog_t	*fog;
 	vec3_t		local;
 
@@ -909,10 +918,18 @@ const fogProgramParms_t *RB_CalcFogProgramParms( void )
 	parm.fogDistanceVector[3] = DotProduct( local, backEnd.viewParms.or.axis[0] );
 
 	// scale the fog vectors based on the fog's thickness
+if(tess.fogNum == 1 /* && !(tess.shader->surfaceFlags & SURF_NOLIGHTMAP) */) {
+	float depth = 1.0f / ( r_fogDepth->value * 8 );
+	parm.fogDistanceVector[0] *= depth;
+	parm.fogDistanceVector[1] *= depth;
+	parm.fogDistanceVector[2] *= depth;
+	parm.fogDistanceVector[3] *= depth;
+} else {
 	parm.fogDistanceVector[0] *= fog->tcScale;
 	parm.fogDistanceVector[1] *= fog->tcScale;
 	parm.fogDistanceVector[2] *= fog->tcScale;
 	parm.fogDistanceVector[3] *= fog->tcScale;
+}
 
 	// rotate the gradient vector for this orientation
 	if ( fog->hasSurface ) {
@@ -939,7 +956,16 @@ const fogProgramParms_t *RB_CalcFogProgramParms( void )
 	}
 
 	parm.fogDistanceVector[3] += 1.0/512;
+if(tess.fogNum == 1 /* && !(tess.shader->surfaceFlags & SURF_NOLIGHTMAP) */) {
+	for ( int n = 0; n < 4; n++ ) {
+		int shift = ((4 - n - 1) * 8);
+		int c = (r_fogColor->integer & (0xFF << shift)) >> shift;
+		defaultFog[n] = (float) c / 255.0f;
+	}
+	parm.fogColor = defaultFog;
+} else {
 	parm.fogColor = fog->color;
+}
 
 	return &parm;
 }
