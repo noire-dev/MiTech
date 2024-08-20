@@ -679,7 +679,7 @@ if(tess.fogNum == 1 /* && !(tess.shader->surfaceFlags & SURF_NOLIGHTMAP) */) {
 	//
 	// fog adjustment for colors to fade out as fog increases
 	//
-	if ( tess.fogNum && (tess.fogNum > 1 || r_fogDepth->integer) )
+	if ( tess.fogNum )
 	{
 		switch ( pStage->adjustColorsForFog )
 		{
