@@ -472,40 +472,35 @@ Blends a fog texture on top of everything else
 ===================
 */
 static void RB_FogPass( void ) {
-    if (r_fogDepth->integer > 0) {
-        uint32_t fogColor = r_fogColor->integer;
+	const fog_t	*fog;
+	int			i;
 
-        for (int i = 0; i < tess.numVertexes; i++) {
-            tess.svars.colors[i].u32 = fogColor;
-        }
+	fog = tr.world->fogs + tess.fogNum;
 
-        RB_CalcFogTexCoords((float *)tess.svars.texcoords[0]);
-    } else {
-        const fog_t *fog = tr.world->fogs + tess.fogNum;
-        for (int i = 0; i < tess.numVertexes; i++) {
+	for ( i = 0; i < tess.numVertexes; i++ ) {
             tess.svars.colors[i].u32 = fog->colorInt.u32;
         }
 
-        RB_CalcFogTexCoords((float *)tess.svars.texcoords[0]);
-    }
+	RB_CalcFogTexCoords( ( float * ) tess.svars.texcoords[0] );
 
-    GL_ClientState(1, CLS_NONE);
-    GL_ClientState(0, CLS_TEXCOORD_ARRAY | CLS_COLOR_ARRAY);
+	GL_ClientState( 1, CLS_NONE );
+	GL_ClientState( 0, CLS_TEXCOORD_ARRAY | CLS_COLOR_ARRAY );
 
-    qglColorPointer(4, GL_UNSIGNED_BYTE, 0, tess.svars.colors[0].rgba);
-    qglTexCoordPointer(2, GL_FLOAT, 0, tess.svars.texcoords[0]);
+	qglColorPointer( 4, GL_UNSIGNED_BYTE, 0, tess.svars.colors[0].rgba );
+	qglTexCoordPointer( 2, GL_FLOAT, 0, tess.svars.texcoords[0] );
 
-    GL_SelectTexture(0);
-    GL_Bind(tr.fogImage);
+	GL_SelectTexture( 0 );
+	GL_Bind( tr.fogImage );
 
-    if (tess.shader->fogPass == FP_EQUAL) {
-        GL_State(GLS_SRCBLEND_SRC_ALPHA | GLS_DSTBLEND_ONE_MINUS_SRC_ALPHA | GLS_DEPTHFUNC_EQUAL);
+	if ( tess.shader->fogPass == FP_EQUAL ) {
+		GL_State( GLS_SRCBLEND_SRC_ALPHA | GLS_DSTBLEND_ONE_MINUS_SRC_ALPHA | GLS_DEPTHFUNC_EQUAL );
     } else {
-        GL_State(GLS_SRCBLEND_SRC_ALPHA | GLS_DSTBLEND_ONE_MINUS_SRC_ALPHA);
+		GL_State( GLS_SRCBLEND_SRC_ALPHA | GLS_DSTBLEND_ONE_MINUS_SRC_ALPHA );
     }
 
-    R_DrawElements(tess.numIndexes, tess.indexes);
+	R_DrawElements( tess.numIndexes, tess.indexes );
 }
+
 
 /*
 ===============
@@ -585,11 +580,7 @@ void R_ComputeColors( const shaderStage_t *pStage )
 				fog = tr.world->fogs + tess.fogNum;
 
 				for ( i = 0; i < tess.numVertexes; i++ ) {
-if(tess.fogNum == 1 /* && !(tess.shader->surfaceFlags & SURF_NOLIGHTMAP) */) {
-					tess.svars.colors[i].u32 = r_fogColor->integer;
-} else {
 					tess.svars.colors[i].u32 = fog->colorInt.u32;
-}
 				}
 			}
 			break;
@@ -990,7 +981,7 @@ void RB_StageIteratorGeneric( void )
 	//
 	// now do fog
 	//
-	if ( tess.fogNum && tess.shader->fogPass || r_fogDepth->integer )
+	if ( tess.fogNum && tess.shader->fogPass )
 	{
 		RB_FogPass();
 	}
