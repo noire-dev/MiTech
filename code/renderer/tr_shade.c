@@ -472,42 +472,48 @@ Blends a fog texture on top of everything else
 ===================
 */
 static void RB_FogPass( void ) {
-	const fog_t	*fog;
-	int			i;
+    const fog_t *fog;
+    int i;
 
-	if(tess.fogNum == 1 && !r_fogDepth->integer) {
-		return;
-	}
+    if (tess.fogNum == 1 && !r_fogDepth->integer) {
+        return;
+    }
 
-	fog = tr.world->fogs + tess.fogNum;
+    if (r_fogDepth->integer > 0) {
+        for (i = 0; i < tess.numVertexes; i++) {
+            tess.svars.colors[i].u32 = r_fogColor->integer;
+        }
+    } else {
+        fog = tr.world->fogs + tess.fogNum;
+        for (i = 0; i < tess.numVertexes; i++) {
+            if (tess.fogNum == 1) {
+                tess.svars.colors[i].u32 = r_fogColor->integer;
+            } else {
+                tess.svars.colors[i].u32 = fog->colorInt.u32;
+            }
+        }
+    }
 
-	for ( i = 0; i < tess.numVertexes; i++ ) {
-if(tess.fogNum == 1 /* && !(tess.shader->surfaceFlags & SURF_NOLIGHTMAP) */) {
-		tess.svars.colors[i].u32 = r_fogColor->integer;
-} else {
-		tess.svars.colors[i].u32 = fog->colorInt.u32;
+    RB_CalcFogTexCoords( ( float * ) tess.svars.texcoords[0] );
+
+    GL_ClientState( 1, CLS_NONE );
+    GL_ClientState( 0, CLS_TEXCOORD_ARRAY | CLS_COLOR_ARRAY );
+
+    qglColorPointer( 4, GL_UNSIGNED_BYTE, 0, tess.svars.colors[0].rgba );
+    qglTexCoordPointer( 2, GL_FLOAT, 0, tess.svars.texcoords[0] );
+
+    GL_SelectTexture( 0 );
+    GL_Bind( tr.fogImage );
+
+    if ( tess.shader->fogPass == FP_EQUAL ) {
+        GL_State( GLS_SRCBLEND_SRC_ALPHA | GLS_DSTBLEND_ONE_MINUS_SRC_ALPHA | GLS_DEPTHFUNC_EQUAL );
+    } else {
+        GL_State( GLS_SRCBLEND_SRC_ALPHA | GLS_DSTBLEND_ONE_MINUS_SRC_ALPHA );
+    }
+
+    R_DrawElements( tess.numIndexes, tess.indexes );
 }
-	}
 
-	RB_CalcFogTexCoords( ( float * ) tess.svars.texcoords[0] );
-
-	GL_ClientState( 1, CLS_NONE );
-	GL_ClientState( 0, CLS_TEXCOORD_ARRAY | CLS_COLOR_ARRAY );
-
-	qglColorPointer( 4, GL_UNSIGNED_BYTE, 0, tess.svars.colors[0].rgba );
-	qglTexCoordPointer( 2, GL_FLOAT, 0, tess.svars.texcoords[0] );
-
-	GL_SelectTexture( 0 );
-	GL_Bind( tr.fogImage );
-
-	if ( tess.shader->fogPass == FP_EQUAL ) {
-		GL_State( GLS_SRCBLEND_SRC_ALPHA | GLS_DSTBLEND_ONE_MINUS_SRC_ALPHA | GLS_DEPTHFUNC_EQUAL );
-	} else {
-		GL_State( GLS_SRCBLEND_SRC_ALPHA | GLS_DSTBLEND_ONE_MINUS_SRC_ALPHA );
-	}
-
-	R_DrawElements( tess.numIndexes, tess.indexes );
-}
 
 
 /*
@@ -993,7 +999,7 @@ void RB_StageIteratorGeneric( void )
 	//
 	// now do fog
 	//
-	if ( tess.fogNum && tess.shader->fogPass )
+	if ( tess.fogNum && tess.shader->fogPass || r_fogDepth->integer )
 	{
 		RB_FogPass();
 	}
