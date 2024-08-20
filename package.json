@@ -1,0 +1,32 @@
+{
+  "name": "quake3e",
+  "version": "1.0.0",
+  "description": "* DONE: Networking, auto-connect, rewrite socks - support `\\dlmap` command\r * Sound (no emscripten, no OpenAL, simpler build), respatialize using https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Web_audio_spatialization_basics\r * DONE: Re-automate build.yml, auto-download wasi-sdk, integrate QVMs/q3lcc: https://github.com/briancullinan/multigame/actions\r * DONE: Upgraded image loader, loads most assets from pk3s and searches for any missing assets through quake3-proxy-server.\r * Multiworld. - Brian Cullinan",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "checksum": "node ./code/wasm/proxy/checksum.js",
+    "start": "node ./code/wasm/proxy/web.js",
+    "repack": "node ./code/wasm/repack.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ec-/Quake3e.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ec-/Quake3e/issues"
+  },
+  "homepage": "https://github.com/ec-/Quake3e#readme",
+  "dependencies": {
+    "express": "^4.19.2",
+    "glob": "^10.3.10",
+    "ip6addr": "^0.2.5",
+    "live-server": "^1.2.2",
+    "node-stream-zip": "^1.15.0",
+    "ws": "^8.18.0"
+  }
+}

@@ -35,9 +35,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 static void S_Update_( int msec );
 static void S_UpdateBackgroundTrack( void );
+#ifndef __WASM__
 static void S_Base_StopAllSounds( void );
 static void S_Base_StopBackgroundTrack( void );
+#endif
 static void S_memoryLoad( sfx_t *sfx );
+
+#ifdef __WASM__
+extern qboolean S_LoadSound( sfx_t *sfx );
+extern void S_Base_ClearLoopingSounds( qboolean killall );
+extern void S_Base_StopLoopingSound(int entityNum);
+extern void S_Base_StartSound( const vec3_t origin, int entityNum, int entchannel, sfxHandle_t sfxHandle );
+extern void S_Base_StartLocalSound( sfxHandle_t sfxHandle, int channelNum );
+extern void S_Base_AddLoopingSound( int entityNum, const vec3_t origin, const vec3_t velocity, sfxHandle_t sfxHandle );
+extern void S_Base_AddRealLoopingSound( int entityNum, const vec3_t origin, const vec3_t velocity, sfxHandle_t sfxHandle );
+extern void S_Base_StopBackgroundTrack( void );
+extern void S_Base_StopAllSounds( void );
+extern void S_Base_StartBackgroundTrack( const char *intro, const char *loop );
+extern void S_Base_RawSamples( int samples, int rate, int width, int n_channels, const byte *data, float volume );
+extern void S_Base_Respatialize( int entityNum, const vec3_t head, vec3_t axis[3], int inwater );
+extern void S_Base_UpdateEntityPosition( int entityNum, const vec3_t origin );
+extern void S_Base_Update( int msec );
+extern void S_Base_ClearSoundBuffer( void );
+#endif
 
 static snd_stream_t *s_backgroundStream = NULL;
 static char s_backgroundLoop[MAX_QPATH];
@@ -63,8 +83,14 @@ channel_t   s_channels[MAX_CHANNELS];
 channel_t   loop_channels[MAX_CHANNELS];
 int			numLoopChannels;
 
-static		qboolean	s_soundStarted;
-static		qboolean	s_soundMuted;
+#ifndef __WASM__
+static		
+#endif
+qboolean	s_soundStarted;
+#ifndef __WASM__
+static		
+#endif
+qboolean	s_soundMuted;
 
 dma_t		dma;
 
@@ -78,7 +104,11 @@ int   		s_paintedtime; 		// sample PAIRS
 // MAX_SFX may be larger than MAX_SOUNDS because
 // of custom player sounds
 #define MAX_SFX			4096
+#ifdef __WASM__
+Q_EXPORT sfx_t s_knownSfx[MAX_SFX];
+#else
 static sfx_t s_knownSfx[MAX_SFX];
+#endif
 static int s_numSfx = 0;
 
 #define LOOP_HASH		128
@@ -151,9 +181,14 @@ static void S_Base_SoundList( void ) {
 				sfx->soundName, mem[sfx->inMemory] );
 	}
 	Com_Printf ("Total resident: %i\n", total);
+#ifndef __WASM__
 	S_DisplayFreeMemory();
+#endif
 }
 
+
+
+#ifndef __WASM__
 
 static void S_ChannelFree( channel_t *v ) {
 	v->thesfx = NULL;
@@ -191,7 +226,7 @@ static void S_ChannelSetup( void ) {
 	Com_DPrintf("Channel memory manager started\n");
 }
 
-
+#endif
 
 // =======================================================================
 // Load a sound
@@ -315,9 +350,12 @@ static sfxHandle_t S_Base_RegisterSound( const char *name, qboolean compressed )
 	sfx_t	*sfx;
 
 	compressed = qfalse;
+#ifndef __WASM__
+// because sound doesn't start until first click, but mods can load anytime
 	if (!s_soundStarted) {
 		return 0;
 	}
+#endif
 
 	if ( strlen( name ) >= MAX_QPATH ) {
 		Com_Printf( "Sound name exceeds MAX_QPATH\n" );
@@ -331,7 +369,9 @@ static sfxHandle_t S_Base_RegisterSound( const char *name, qboolean compressed )
 
 	if ( sfx->soundData ) {
 		if ( sfx->defaultSound ) {
+#ifndef __WASM__
 			Com_Printf( S_COLOR_YELLOW "WARNING: could not find %s - using default\n", sfx->soundName );
+#endif
 			return 0;
 		}
 		return sfx - s_knownSfx;
@@ -343,7 +383,9 @@ static sfxHandle_t S_Base_RegisterSound( const char *name, qboolean compressed )
 	S_memoryLoad( sfx );
 
 	if ( sfx->defaultSound ) {
+#ifndef __WASM__
 		Com_Printf( S_COLOR_YELLOW "WARNING: could not find %s - using default\n", sfx->soundName );
+#endif
 		return 0;
 	}
 
@@ -359,6 +401,7 @@ S_BeginRegistration
 static void S_Base_BeginRegistration( void ) {
 	s_soundMuted = qfalse;		// we can play again
 
+#ifndef __WASM__
 	if ( s_numSfx )
 		return;
 
@@ -366,8 +409,13 @@ static void S_Base_BeginRegistration( void ) {
 
 	Com_Memset( s_knownSfx, 0, sizeof( s_knownSfx ) );
 	Com_Memset( sfxHash, 0, sizeof( sfxHash ) );
+#endif
 
+#ifdef __WASM__
+	S_Base_RegisterSound( "sound/misc/silence.wav", qfalse ); // changed to a sound in baseq3
+#else
 	S_Base_RegisterSound( "sound/feedback/hit.wav", qfalse ); // changed to a sound in baseq3
+#endif
 }
 
 
@@ -376,11 +424,15 @@ static void S_memoryLoad( sfx_t *sfx ) {
 	// load the sound file
 	if ( !S_LoadSound ( sfx ) ) {
 		Com_DPrintf( S_COLOR_YELLOW "WARNING: couldn't load sound: %s\n", sfx->soundName );
+#ifndef __WASM__ // need multiple chances to load because it might have been remote
 		sfx->defaultSound = qtrue;
+#endif
 	}
 
 	sfx->inMemory = qtrue;
 }
+
+#ifndef __WASM__
 
 //=============================================================================
 
@@ -398,6 +450,11 @@ static void S_SpatializeOrigin( const vec3_t origin, int master_vol, int *left_v
 	vec_t	lscale, rscale, scale;
 	vec3_t	source_vec;
 	vec3_t	vec;
+
+#ifdef __WASM__
+	// TODO: change speaker position in web audio
+	return;
+#endif
 
 	const float dist_mult = SOUND_ATTENUATE;
 	
@@ -447,6 +504,11 @@ static void S_SpatializeOrigin( const vec3_t origin, int master_vol, int *left_v
 // =======================================================================
 // Start a sound effect
 // =======================================================================
+
+#ifdef __WASM__
+extern void S_Base_StartSound( const vec3_t origin, int entityNum, int entchannel, sfxHandle_t sfxHandle );
+extern void S_Base_StartLocalSound( sfxHandle_t sfxHandle, int channelNum );
+#else
 
 /*
 ====================
@@ -616,6 +678,8 @@ static void S_Base_StartLocalSound( sfxHandle_t sfxHandle, int channelNum ) {
 	S_Base_StartSound (NULL, listener_number, channelNum, sfxHandle );
 }
 
+#endif
+
 
 /*
 ==================
@@ -729,7 +793,11 @@ void S_Base_AddLoopingSound( int entityNum, const vec3_t origin, const vec3_t ve
 	}
 
 	if ( !sfx->soundLength ) {
+#ifdef __WASM__
+		return;
+#else
 		Com_Error( ERR_DROP, "%s has length 0", sfx->soundName );
+#endif
 	}
 
 	VectorCopy( origin, loopSounds[entityNum].origin );
@@ -793,7 +861,11 @@ void S_Base_AddRealLoopingSound( int entityNum, const vec3_t origin, const vec3_
 	}
 
 	if ( !sfx->soundLength ) {
+#ifdef __WASM__
+		return;
+#else
 		Com_Error( ERR_DROP, "%s has length 0", sfx->soundName );
+#endif
 	}
 	VectorCopy( origin, loopSounds[entityNum].origin );
 	VectorCopy( velocity, loopSounds[entityNum].velocity );
@@ -1024,6 +1096,10 @@ void S_Base_Respatialize( int entityNum, const vec3_t head, vec3_t axis[3], int 
 	channel_t	*ch;
 	vec3_t		origin;
 
+#ifdef __WASM__
+	return;
+#endif
+
 	if ( !s_soundStarted || s_soundMuted ) {
 		return;
 	}
@@ -1196,7 +1272,7 @@ static void S_Update_( int msec ) {
 		return;
 	}
 
-	thisTime = Com_Milliseconds();
+	thisTime = Sys_Milliseconds();
 
 	// Updates s_soundtime
 	S_GetSoundtime();
@@ -1236,6 +1312,7 @@ static void S_Update_( int msec ) {
 	}
 
 	// add raw data from streamed samples
+#ifndef __WASM__
 	S_UpdateBackgroundTrack();
 
 	SNDDMA_BeginPainting();
@@ -1243,6 +1320,7 @@ static void S_Update_( int msec ) {
 	S_PaintChannels( endtime );
 
 	SNDDMA_Submit();
+#endif
 
 	lastTime = thisTime;
 }
@@ -1291,9 +1369,9 @@ static void S_OpenBackgroundStream( const char *filename ) {
 		return;
 	}
 
-	//if( s_backgroundStream->info.channels != 2 || s_backgroundStream->info.rate != 22050 ) {
-	//	Com_Printf(S_COLOR_YELLOW "WARNING: music file %s is not 22k stereo\n", filename );
-	//}
+	if( s_backgroundStream->info.channels != 2 || s_backgroundStream->info.rate != 22050 ) {
+		Com_Printf(S_COLOR_YELLOW "WARNING: music file %s is not 22k stereo\n", filename );
+	}
 }
 
 
@@ -1438,6 +1516,9 @@ void S_FreeOldestSound( void ) {
 }
 
 
+#endif
+
+
 // =======================================================================
 // Shutdown sound engine
 // =======================================================================
@@ -1450,14 +1531,25 @@ static void S_Base_Shutdown( void ) {
 
 	SNDDMA_Shutdown();
 
+#ifndef __WASM__
 	// release sound buffers only when switching to dedicated 
 	// to avoid redundant reallocation at client restart
 	if ( com_dedicated->integer )
 		SND_shutdown();
+#endif
 
 	s_soundStarted = qfalse;
 
 	s_numSfx = 0; // clean up sound cache -EC-
+#ifdef __WASM__
+	Com_Memset( s_knownSfx, 0, sizeof( s_knownSfx ) );
+	Com_Memset( sfxHash, 0, sizeof( sfxHash ) );
+#endif
+
+#ifdef __WASM__
+	Com_Memset( s_knownSfx, 0, sizeof( s_knownSfx ) );
+	Com_Memset( sfxHash, 0, sizeof( sfxHash ) );
+#endif
 
 	if ( dma_buffer2 != buffer2 )
 		free( dma_buffer2 );
@@ -1520,12 +1612,19 @@ qboolean S_Base_Init( soundInterface_t *si ) {
 
 	r = SNDDMA_Init();
 
+#ifndef __WASM__
 	if ( r ) {
 		s_soundStarted = qtrue;
 		s_soundMuted = qtrue;
 //		s_numSfx = 0;
 
 		Com_Memset( sfxHash, 0, sizeof( sfxHash ) );
+#else
+		s_soundStarted = r;
+		if(r) {
+			s_soundMuted = qtrue;
+		}
+#endif
 
 		s_soundtime = 0;
 		s_paintedtime = 0;
@@ -1539,9 +1638,11 @@ qboolean S_Base_Init( soundInterface_t *si ) {
 			dma_buffer2 = malloc( dma.samples * dma.samplebits/8 );
 			memset( dma_buffer2, 0, dma.samples * dma.samplebits/8 );
 		}
+#ifndef __WASM__
 	} else {
 		return qfalse;
 	}
+#endif
 
 	si->Shutdown = S_Base_Shutdown;
 	si->StartSound = S_Base_StartSound;

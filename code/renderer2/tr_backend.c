@@ -52,6 +52,21 @@ void GL_BindToTMU( image_t *image, int tmu )
 
 		image->frameUsed = tr.frameCount;
 		texture = image->texnum;
+#ifdef __WASM__
+		// this is because if a texture on the web does not load, it will make
+		//   the entire rendering slow as it tries to fill every pixel with a
+		//   null image.
+		//if(image->paletteImage) {
+		//	texture = image->paletteImage;
+		//} else
+		//if(!texture || image->width <= 1 || image->height <= 1) {
+		//	texture = tr.defaultImage->texnum;
+		//}
+#endif
+		if(image && !image->texnum && image->palette) {
+			texture = image->palette->texnum;
+		}
+
 	}
 	else
 	{

@@ -207,13 +207,15 @@ typedef struct {
 	char		downloadList[BIG_INFO_STRING]; // list of paks we need to download
 	qboolean	downloadRestart;	// if true, we need to do another FS_Restart because we downloaded a pak
 
-#ifdef USE_CURL
+#if defined(USE_CURL) || defined(__WASM__)
 	qboolean	cURLEnabled;
 	qboolean	cURLUsed;
 	qboolean	cURLDisconnected;
 	char		downloadURL[MAX_OSPATH];
+#ifndef __WASM__
 	CURL		*downloadCURL;
 	CURLM		*downloadCURLM;
+#endif
 #endif /* USE_CURL */
 
 	// demo information
@@ -374,6 +376,12 @@ qboolean	Com_DL_InProgress( const download_t *dl );
 qboolean	Com_DL_ValidFileName( const char *fileName );
 qboolean	CL_Download( const char *cmd, const char *pakname, qboolean autoDownload );
 
+#endif
+
+#ifdef __WASM__
+void		Com_DL_Cleanup( void * );
+qboolean	CL_Download( const char *cmd, const char *pakname, qboolean autoDownload );
+void CL_cURL_BeginDownload( const char *localName, const char *remoteName );
 #endif
 
 //=============================================================================
@@ -595,9 +603,12 @@ qboolean CL_VideoRecording( void );
 //
 // cl_jpeg.c
 //
+#ifndef __WASM__
 size_t	CL_SaveJPGToBuffer( byte *buffer, size_t bufSize, int quality, int image_width, int image_height, byte *image_buffer, int padding );
 void	CL_SaveJPG( const char *filename, int quality, int image_width, int image_height, byte *image_buffer, int padding );
 void	CL_LoadJPG( const char *filename, unsigned char **pic, int *width, int *height );
+#endif
+
 
 // platform-specific
 void	GLimp_InitGamma(glconfig_t *config);

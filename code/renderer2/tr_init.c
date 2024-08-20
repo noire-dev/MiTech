@@ -1510,6 +1510,9 @@ void R_Init( void ) {
 
 	R_InitVaos();
 
+#ifdef __WASM__
+	tr.numShaders = 0;
+#endif
 	R_InitShaders();
 
 	R_InitSkins();
@@ -1526,7 +1529,9 @@ void R_Init( void ) {
 		ri.Printf (PRINT_ALL, "glGetError() = 0x%x\n", err);
 
 	// print info
+#ifndef __WASM__
 	GfxInfo_f();
+#endif
 	ri.Printf( PRINT_ALL, "----- finished R_Init -----\n" );
 }
 
@@ -1566,6 +1571,7 @@ static void RE_Shutdown( refShutdownCode_t code ) {
 	R_DoneFreeType();
 
 	// shut down platform specific OpenGL stuff
+#ifndef __WASM__
 	if ( code != REF_KEEP_CONTEXT ) {
 		ri.GLimp_Shutdown( code == REF_UNLOAD_DLL ? qtrue: qfalse );
 
@@ -1577,6 +1583,7 @@ static void RE_Shutdown( refShutdownCode_t code ) {
 
 		Com_Memset( &glState, 0, sizeof( glState ) );
 	}
+#endif
 
 	ri.FreeAll();
 
@@ -1597,6 +1604,13 @@ static void RE_EndRegistration( void ) {
 		RB_ShowImages();
 	}
 }
+
+#ifdef __WASM__
+void R_FinishImage3( image_t *, byte *pic, GLenum picFormat, int numMips );
+void RE_FinishImage3(void *img, byte *pic, int picFormat, int numMips) {
+	R_FinishImage3((image_t *)img, pic, picFormat, numMips);
+}
+#endif
 
 
 /*
@@ -1669,6 +1683,13 @@ refexport_t *GetRefAPI ( int apiVersion, refimport_t *rimp ) {
 	re.GetConfig = RE_GetConfig;
 	re.VertexLighting = RE_VertexLighting;
 	re.SyncRender = RE_SyncRender;
+
+#ifdef __WASM__
+	re.InitShaders = R_InitShaders;
+#endif
+#if defined(__WASM__)
+	re.FinishImage3 = RE_FinishImage3;
+#endif
 
 	return &re;
 }

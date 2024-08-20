@@ -174,12 +174,17 @@ float FloatSwap( const float *f );
 	#endif
 #endif
 
+#ifdef __WASM__
+#include "../wasm/sys_overrides.h"
+#else
 #if defined (_WIN32) && !defined(_MSC_VER)
 #define Q_setjmp __builtin_setjmp
 #define Q_longjmp __builtin_longjmp
 #else
 #define Q_setjmp setjmp
 #define Q_longjmp longjmp
+#endif
+
 #endif
 
 typedef unsigned char byte;
