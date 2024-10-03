@@ -2422,7 +2422,7 @@ Wrapper for R_CreateImage2(), for the old parameters.
 */
 image_t *R_CreateImage(const char *name, byte *pic, int width, int height, imgType_t type, imgFlags_t flags, int internalFormat)
 {
-	return R_CreateImage2(name, pic, width, height, GL_RGBA8, 0, type, flags, internalFormat);
+	return R_CreateImage2(name, pic, width, height, GL_RGBA8, 0, type, flags, internalFormat, NULL);
 }
 
 
@@ -2644,7 +2644,6 @@ image_t	*R_FindImageFile( const char *name, imgType_t type, imgFlags_t flags )
 		}
 	}
 
-	#ifdef __WASM__
 	byte* pal = R_FindPalette(name);
 	image_t *palette = NULL;
 	if(pal) {
@@ -2656,7 +2655,6 @@ image_t	*R_FindImageFile( const char *name, imgType_t type, imgFlags_t flags )
 	if(Q_stristr(name, "*pal")) {
 		return palette;
 	}
-	#endif
 
 	//
 	// load the pic from disk
@@ -2802,7 +2800,7 @@ image_t	*R_FindImageFile( const char *name, imgType_t type, imgFlags_t flags )
 	}
 
 	// before createimage changes things, make copies
-	image = R_CreateImage2( ( char * ) name, pic, width, height, picFormat, picNumMips, type, flags, 0 );
+	image = R_CreateImage2( ( char * ) name, pic, width, height, picFormat, picNumMips, type, flags, 0, NULL );
 	image->palette = palette;
 	ri.Free( pic );
 
