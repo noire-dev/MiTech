@@ -442,12 +442,7 @@ static void Cmd_ExecScript_f( void ) {
 	FS_ReadFile( filename, &f.v );
 	FS_RestorePure();
 	if ( f.v == NULL ) {
-		//Com_Printf( "couldn't exec %s\n", filename );
 		return;
-	}
-	
-	if(cl_arenascriptDebug->integer){
-		Com_Printf( ".as|  %s: Script %s loaded.\n", Cmd_Argv( 0 ), filename );
 	}
 
 	Cbuf_AddText( f.c );
