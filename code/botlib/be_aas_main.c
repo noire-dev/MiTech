@@ -292,8 +292,8 @@ int AAS_LoadMap(const char *mapname)
 //===========================================================================
 int AAS_Setup(void)
 {
-	aasworld.maxclients = (int) LibVarValue("maxclients", "128");
-	aasworld.maxentities = (int) LibVarValue("maxentities", "1024");
+	aasworld.maxclients = (int) LibVarValue("maxclients", "256");
+	aasworld.maxentities = (int) LibVarValue("maxentities", "16384");
 	// as soon as it's set to 1 the routing cache will be saved
 	saveroutingcache = LibVar("saveroutingcache", "0");
 	//allocate memory for the entities

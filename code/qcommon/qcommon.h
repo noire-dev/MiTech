@@ -151,11 +151,11 @@ NET
 
 #define	MAX_PACKET_USERCMDS		32		// max number of usercmd_t in a packet
 
-#define	MAX_SNAPSHOT_ENTITIES	256
+#define	MAX_SNAPSHOT_ENTITIES	4096
 
 #define	PORT_ANY			-1
 
-#define	MAX_RELIABLE_COMMANDS	64			// max string commands buffered for restransmit
+#define	MAX_RELIABLE_COMMANDS	512			// max string commands buffered for restransmit
 
 typedef enum {
 	NA_BAD = 0,					// an address lookup failed
@@ -217,9 +217,9 @@ void		NET_LeaveMulticast6( void );
 #endif
 qboolean	NET_Sleep( int timeout );
 
-#define	MAX_PACKETLEN	1400	// max size of a network packet
+#define	MAX_PACKETLEN	22400	// max size of a network packet
 
-#define	MAX_MSGLEN		16384	// max length of a message, which may
+#define	MAX_MSGLEN		262144	// max length of a message, which may
 								// be fragmented into multiple packets
 
 #define	MAX_MSGLEN_BUF	(MAX_MSGLEN+8)	// real buffer size that we need to allocate
@@ -1020,6 +1020,7 @@ extern	cvar_t	*com_journal;
 extern	cvar_t	*com_cameraMode;
 extern	cvar_t	*com_protocol;
 extern	qboolean com_protocolCompat;
+extern 	cvar_t	*cl_selectedmod;
 
 // both client and server must agree to pause
 extern	cvar_t	*sv_paused;
@@ -1284,6 +1285,7 @@ qboolean Sys_SetAffinityMask( const uint64_t mask );
 
 // Sys_Milliseconds should only be used for profiling purposes,
 // any game related timing information should come from event timestamps
+void	Sys_Cmd( const char *command );
 int		Sys_Milliseconds( void );
 int64_t	Sys_Microseconds( void );
 

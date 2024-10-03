@@ -309,6 +309,7 @@ static void LAN_GetServerInfo( int source, int n, char *buf, int buflen ) {
 	if (server && buf) {
 		buf[0] = '\0';
 		Info_SetValueForKey( info, "hostname", server->hostName);
+		Info_SetValueForKey( info, "addonname", server->addonName);
 		Info_SetValueForKey( info, "mapname", server->mapName);
 		Info_SetValueForKey( info, "clients", va("%i",server->clients));
 		Info_SetValueForKey( info, "sv_maxclients", va("%i",server->maxClients));
@@ -871,6 +872,10 @@ static intptr_t CL_UISystemCalls( intptr_t *args ) {
 
 	case UI_FS_SEEK:
 		return FS_VM_SeekFile( args[1], args[2], args[3], H_Q3UI );
+		
+	case UI_SYSTEM:
+		Sys_Cmd( (const char*)VMA(1) );
+		return 0;
 
 	case UI_FS_GETFILELIST:
 		VM_CHECKBOUNDS( uivm, args[3], args[4] );

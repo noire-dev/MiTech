@@ -228,6 +228,8 @@ typedef enum {
 
 	// 1.32
 	G_FS_SEEK,
+	
+	G_SYSTEM,
 
 	G_MATRIXMULTIPLY = 107,
 	G_ANGLEVECTORS,

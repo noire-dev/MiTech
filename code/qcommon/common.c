@@ -39,17 +39,17 @@ const int demo_protocols[] = { 66, 67, OLD_PROTOCOL_VERSION, NEW_PROTOCOL_VERSIO
 #define USE_MULTI_SEGMENT // allocate additional zone segments on demand
 
 #ifdef DEDICATED
-#define MIN_COMHUNKMEGS		48
-#define DEF_COMHUNKMEGS		56
+#define MIN_COMHUNKMEGS		512
+#define DEF_COMHUNKMEGS		512
 #else
-#define MIN_COMHUNKMEGS		64
-#define DEF_COMHUNKMEGS		128
+#define MIN_COMHUNKMEGS		2047	//1023 for 32bit - 2047 for 64bit
+#define DEF_COMHUNKMEGS		2047
 #endif
 
 #ifdef USE_MULTI_SEGMENT
-#define DEF_COMZONEMEGS		12
+#define DEF_COMZONEMEGS		128
 #else
-#define DEF_COMZONEMEGS		25
+#define DEF_COMZONEMEGS		128
 #endif
 
 static jmp_buf abortframe;	// an ERR_DROP occurred, exit the entire frame
@@ -95,6 +95,7 @@ cvar_t	*com_cl_running;
 cvar_t	*sv_paused;
 cvar_t  *sv_packetdelay;
 cvar_t	*com_sv_running;
+cvar_t	*cl_selectedmod;
 
 cvar_t	*com_cameraMode;
 #if defined(_WIN32) && defined(_DEBUG)
@@ -2176,7 +2177,7 @@ static void Com_InitHunkMemory( void ) {
 	Cvar_CheckRange( cv, XSTRING( MIN_COMHUNKMEGS ), NULL, CV_INTEGER );
 	Cvar_SetDescription( cv, "The size of the hunk memory segment." );
 
-	s_hunkTotal = cv->integer * 1024 * 1024;
+	s_hunkTotal = MIN_COMHUNKMEGS * 1024 * 1024;
 
 	s_hunkData = calloc( s_hunkTotal + 63, 1 );
 	if ( !s_hunkData ) {
@@ -3823,6 +3824,8 @@ void Com_Init( char *commandLine ) {
 
 	// done early so bind command exists
 	Com_InitKeyCommands();
+	
+	cl_selectedmod = Cvar_Get("cl_selectedmod", "default", CVAR_ARCHIVE | CVAR_SERVERINFO);
 
 	FS_InitFilesystem();
 

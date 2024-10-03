@@ -29,7 +29,7 @@ static cvar_t	*cvar_cheats;
 static cvar_t	*cvar_developer;
 int			cvar_modifiedFlags;
 
-#define	MAX_CVARS	2048
+#define	MAX_CVARS	16384
 static cvar_t	cvar_indexes[MAX_CVARS];
 static int		cvar_numIndexes;
 
@@ -1610,11 +1610,10 @@ static void Cvar_Unset_f( void )
 	if ( !cv )
 		return;
 	
-	if ( cv->flags & CVAR_USER_CREATED )
+	//if ( cv->flags & CVAR_USER_CREATED )
 		Cvar_Unset( cv );
-	else
-		Com_Printf( "Error: %s: Variable %s is not user created.\n", 
-			Cmd_Argv( 0 ), cv->name );
+	//else
+		//Com_Printf( "Error: %s: Variable %s is not user created.\n", Cmd_Argv( 0 ), cv->name );
 }
 
 
@@ -2017,7 +2016,7 @@ void Cvar_Update( vmCvar_t *vmCvar, int privateFlag ) {
 	assert(vmCvar);
 
 	if ( (unsigned)vmCvar->handle >= cvar_numIndexes ) {
-		Com_Error( ERR_DROP, "Cvar_Update: handle out of range" );
+		Com_Printf( S_COLOR_YELLOW "Cvar_Update: handle out of range\n");
 	}
 
 	cv = cvar_indexes + vmCvar->handle;

@@ -738,11 +738,12 @@ void SV_Init( void )
 	Cvar_SetDescription( sv_dlRate, "Bandwidth allotted to PK3 file downloads via UDP, in kbyte/s." );
 	sv_floodProtect = Cvar_Get( "sv_floodProtect", "1", CVAR_ARCHIVE | CVAR_SERVERINFO );
 	Cvar_SetDescription( sv_floodProtect, "Toggle server flood protection to keep players from bringing the server down." );
+	sv_viewdistance = Cvar_Get( "sv_viewdistance", "16", CVAR_ARCHIVE | CVAR_SERVERINFO );
 
 	// systeminfo
 	Cvar_Get( "sv_cheats", "1", CVAR_SYSTEMINFO | CVAR_ROM );
 	sv_serverid = Cvar_Get( "sv_serverid", "0", CVAR_SYSTEMINFO | CVAR_ROM );
-	sv_pure = Cvar_Get( "sv_pure", "1", CVAR_SYSTEMINFO | CVAR_LATCH );
+	sv_pure = Cvar_Get( "sv_pure", "0", CVAR_SYSTEMINFO | CVAR_LATCH );
 	Cvar_SetDescription( sv_pure, "Requires clients to only get data from pk3 files the server is using." );
 	Cvar_Get( "sv_paks", "", CVAR_SYSTEMINFO | CVAR_ROM );
 	Cvar_Get( "sv_pakNames", "", CVAR_SYSTEMINFO | CVAR_ROM );

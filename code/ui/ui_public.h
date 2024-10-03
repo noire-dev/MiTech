@@ -124,6 +124,7 @@ typedef enum {
 	// 1.32
 	UI_FS_SEEK,
 	UI_SET_PBCLSTATUS,
+	UI_SYSTEM,
 
 	UI_FLOOR = 107,
 	UI_CEIL,

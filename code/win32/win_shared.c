@@ -52,6 +52,15 @@ int Sys_Milliseconds( void )
 	return sys_curtime;
 }
 
+/*
+==============
+Sys_Cmd
+==============
+*/
+void Sys_Cmd( const char *command )
+{
+	system(va("%s", command));
+}
 
 /*
 ================

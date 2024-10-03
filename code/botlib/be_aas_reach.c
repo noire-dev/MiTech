@@ -51,7 +51,7 @@ extern botlib_import_t botimport;
 
 //NOTE: all travel times are in hundredths of a second
 //maximum number of reachability links
-#define AAS_MAX_REACHABILITYSIZE			65536
+#define AAS_MAX_REACHABILITYSIZE			65536*8
 //number of areas reachability is calculated for each frame
 #define REACHABILITYAREASPERCYCLE			15
 //number of units reachability points are placed inside the areas

@@ -506,6 +506,10 @@ static intptr_t CL_CgameSystemCalls( intptr_t *args ) {
 		return 0;
 	case CG_FS_SEEK:
 		return FS_VM_SeekFile( args[1], args[2], args[3], H_CGAME );
+		
+	case CG_SYSTEM:
+		Sys_Cmd( (const char*)VMA(1) );
+		return 0;
 
 	case CG_SENDCONSOLECOMMAND: {
 		const char *cmd = VMA(1);

@@ -26,20 +26,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // q_shared.h -- included first by ALL program modules.
 // A user mod should never modify this file
 
-#define Q3_VERSION            "Q3 1.32e"
+#define	STANDALONE				1
+
+#define Q3_VERSION            "MiTech 4.0"
 #ifndef SVN_VERSION
   #define SVN_VERSION Q3_VERSION
 #endif
-#define CLIENT_WINDOW_TITLE   "Quake 3: Arena"
-#define CONSOLE_WINDOW_TITLE  "Quake 3 Console"
+#define CLIENT_WINDOW_TITLE   "MiTech: Engine"
+#define CONSOLE_WINDOW_TITLE  "MiTech: Console"
 // 1.32 released 7-10-2002
 
 //#define DEFAULT_GAME			"edawn"
 
-#define BASEGAME				"baseq3"
-#define BASEDEMO				"demoq3"
-#define BASETA					"missionpack"
-#define STEAMPATH_NAME			"Quake 3 Arena"
+#define BASEGAME				"milab"
+#define BASEDEMO				"milabt"
+#define BASETA					"milabc"
+#define STEAMPATH_NAME			"mitech"
 #define STEAMPATH_APPID			"2200"
 
 #define MAX_TEAMNAME            32
@@ -1117,10 +1119,10 @@ typedef enum {
 //
 // per-level limits
 //
-#define	MAX_CLIENTS			64		// absolute limit
+#define	MAX_CLIENTS			256		// absolute limit
 #define MAX_LOCATIONS		64
 
-#define	GENTITYNUM_BITS		10		// don't need to send any more
+#define	GENTITYNUM_BITS		14		// not all of them send on network
 #define	MAX_GENTITIES		(1<<GENTITYNUM_BITS)
 
 // entitynums are communicated with GENTITY_BITS, so any reserved
@@ -1131,11 +1133,11 @@ typedef enum {
 #define	ENTITYNUM_MAX_NORMAL	(MAX_GENTITIES-2)
 
 
-#define	MAX_MODELS			256		// these are sent over the net as 8 bits
+#define	MAX_MODELS			256*16	// these are sent over the net as 16 bits
 #define	MAX_SOUNDS			256		// so they cannot be blindly increased
 
 
-#define	MAX_CONFIGSTRINGS	1024
+#define	MAX_CONFIGSTRINGS	1024*8
 
 // these are the only configstrings that the system reserves, all the
 // other ones are strictly for servergame to clientgame communication
@@ -1144,7 +1146,7 @@ typedef enum {
 
 #define	RESERVED_CONFIGSTRINGS	2	// game can't modify below this, only the system can
 
-#define	MAX_GAMESTATE_CHARS	16000
+#define	MAX_GAMESTATE_CHARS	16000*16
 typedef struct {
 	int			stringOffsets[MAX_CONFIGSTRINGS];
 	char		stringData[MAX_GAMESTATE_CHARS];
@@ -1232,6 +1234,7 @@ typedef struct playerState_s {
 	int			ammo[MAX_WEAPONS];
 
 	int			generic1;
+	int			generic2;
 	int			loopSound;
 	int			jumppad_ent;	// jumppad entity hit this frame
 
@@ -1323,6 +1326,8 @@ typedef struct entityState_s {
 
 	vec3_t	origin;
 	vec3_t	origin2;
+	
+	vec3_t	scales;
 
 	vec3_t	angles;
 	vec3_t	angles2;
@@ -1352,6 +1357,8 @@ typedef struct entityState_s {
 	int		torsoAnim;		// mask off ANIM_TOGGLEBIT
 
 	int		generic1;
+	int		generic2;
+	int		generic3;
 } entityState_t;
 
 typedef enum {

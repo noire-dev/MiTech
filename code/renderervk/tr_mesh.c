@@ -80,6 +80,8 @@ static int R_CullModel( md3Header_t *header, const trRefEntity_t *ent, vec3_t bo
 	//vec3_t bounds[2];
 	md3Frame_t	*oldFrame, *newFrame;
 	int			i;
+	
+	return CULL_IN;
 
 	// compute frame pointers
 	newFrame = ( md3Frame_t * ) ( ( byte * ) header + header->ofsFrames ) + ent->e.frame;

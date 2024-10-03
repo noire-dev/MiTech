@@ -2298,9 +2298,9 @@ void RE_LoadWorldMap( const char *name ) {
 		( (int32_t *)header )[i] = LittleLong( ( (int32_t *)header )[i] );
 	}
 
-	if ( header->version != BSP_VERSION ) {
+	/*if ( header->version != BSP_VERSION ) {
 		ri.Error( ERR_DROP, "%s: %s has wrong version number (%i should be %i)", __func__, name, header->version, BSP_VERSION );
-	}
+	}*/
 
 	for ( i = 0; i < HEADER_LUMPS; i++ ) {
 		int32_t ofs = header->lumps[i].fileofs;
