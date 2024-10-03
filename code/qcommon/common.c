@@ -4088,11 +4088,7 @@ void Com_WriteConfiguration( void ) {
 #ifndef DEDICATED
 	gamedir = FS_GetCurrentGameDir();
 	basegame = FS_GetBaseGameDir();
-	if ( UI_usesUniqueCDKey() && gamedir[0] && Q_stricmp( basegame, gamedir ) ) {
-		Com_WriteCDKey( gamedir, &cl_cdkey[16] );
-	} else {
-		Com_WriteCDKey( basegame, cl_cdkey );
-	}
+	Com_WriteCDKey( basegame, cl_cdkey ); 
 #endif
 }
 
