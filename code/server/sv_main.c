@@ -728,7 +728,7 @@ if a user is interested in a server to do a full status
 static void SVC_Info( const netadr_t *from ) {
 	int		i, count, humans;
 	const char	*gamedir;
-        char	*addondir;
+    const char	*addondir;
 	char	infostring[MAX_INFO_STRING];
 
 	// ignore if we are in single player

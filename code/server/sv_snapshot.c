@@ -421,7 +421,7 @@ static void SV_AddEntitiesVisibleFromPoint( const vec3_t origin, clientSnapshot_
 			} else {
 				continue;
 			}
-		}*/
+		}
 
 		// calculate distance from the entity to the client
 		VectorSubtract(ent->r.currentOrigin, origin, dir);
