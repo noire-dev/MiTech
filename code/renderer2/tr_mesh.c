@@ -80,6 +80,8 @@ static int R_CullModel( mdvModel_t *model, const trRefEntity_t *ent ) {
 	mdvFrame_t	*oldFrame, *newFrame;
 	int			i;
 
+	return CULL_IN;
+
 	// compute frame pointers
 	newFrame = model->frames + ent->e.frame;
 	oldFrame = model->frames + ent->e.oldframe;
