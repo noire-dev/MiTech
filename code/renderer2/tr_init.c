@@ -1199,7 +1199,7 @@ static void R_Register( void )
 	r_parallaxMapShadows = ri.Cvar_Get( "r_parallaxMapShadows", "0", CVAR_ARCHIVE | CVAR_LATCH );
 	ri.Cvar_SetDescription( r_parallaxMapShadows, "Enable self-shadowing on parallax map supported materials." );
 	r_cubeMapping = ri.Cvar_Get( "r_cubeMapping", "0", CVAR_ARCHIVE | CVAR_LATCH );
-	r_cubemapSize = ri.Cvar_Get( "r_cubemapSize", "2024", CVAR_ARCHIVE | CVAR_LATCH );
+	r_cubemapSize = ri.Cvar_Get( "r_cubemapSize", "256", CVAR_ARCHIVE | CVAR_LATCH );
 	r_deluxeSpecular = ri.Cvar_Get("r_deluxeSpecular", "0.0", CVAR_ARCHIVE | CVAR_LATCH);
 	r_pbr = ri.Cvar_Get("r_pbr", "0", CVAR_ARCHIVE | CVAR_LATCH);
 	ri.Cvar_SetDescription( r_pbr, "Enable physically based rendering." );
@@ -1222,7 +1222,7 @@ static void R_Register( void )
 	r_forceSun = ri.Cvar_Get( "r_forceSun", "1", CVAR_ARCHIVE );
 	r_forceSunLightScale = ri.Cvar_Get( "r_forceSunLightScale", "1.0", CVAR_ARCHIVE );
 	r_forceSunAmbientScale = ri.Cvar_Get( "r_forceSunAmbientScale", "0.5", CVAR_ARCHIVE );
-	r_drawSunRays = ri.Cvar_Get( "r_drawSunRays", "0", CVAR_ARCHIVE | CVAR_LATCH );
+	r_drawSunRays = ri.Cvar_Get( "r_drawSunRays", "1", CVAR_ARCHIVE | CVAR_LATCH );
 	r_sunlightMode = ri.Cvar_Get( "r_sunlightMode", "1", CVAR_ARCHIVE | CVAR_LATCH );
 
 	r_sunShadows = ri.Cvar_Get( "r_sunShadows", "1", CVAR_ARCHIVE | CVAR_LATCH );
@@ -1272,7 +1272,7 @@ static void R_Register( void )
 	ri.Cvar_SetDescription( r_ignoreGLErrors, "Ignore OpenGL errors." );
 	r_fastsky = ri.Cvar_Get( "r_fastsky", "0", CVAR_ARCHIVE );
 	ri.Cvar_SetDescription( r_fastsky, "Draw flat colored skies." );
-	r_drawSun = ri.Cvar_Get( "r_drawSun", "0", CVAR_ARCHIVE );
+	r_drawSun = ri.Cvar_Get( "r_drawSun", "1", CVAR_ARCHIVE );
 	ri.Cvar_SetDescription( r_drawSun, "Draw sun shader in skies." );
 	r_dynamiclight = ri.Cvar_Get( "r_dynamiclight", "1", CVAR_ARCHIVE );
 	ri.Cvar_SetDescription( r_dynamiclight, "Enables dynamic lighting." );

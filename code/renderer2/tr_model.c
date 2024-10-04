@@ -294,7 +294,7 @@ qhandle_t RE_RegisterModel( const char *name ) {
 	Q_strncpyz( mod->name, name, sizeof( mod->name ) );
 
 
-	R_IssuePendingRenderCommands();
+	//R_IssuePendingRenderCommands();
 
 	mod->type = MOD_BAD;
 	mod->numLods = 0;
@@ -302,7 +302,7 @@ qhandle_t RE_RegisterModel( const char *name ) {
 	//
 	// load the files
 	//
-	Q_strncpyz( localName, name, sizeof( localName ) );
+	Q_strncpyz( localName, name, MAX_QPATH );
 
 	ext = COM_GetExtension( localName );
 
@@ -1170,7 +1170,7 @@ void RE_BeginRegistration( glconfig_t *glconfigOut ) {
 
 	*glconfigOut = glConfig;
 
-	R_IssuePendingRenderCommands();
+	//R_IssuePendingRenderCommands();
 
 	tr.visIndex = 0;
 	// force markleafs to regenerate

@@ -41,6 +41,8 @@ typedef unsigned int glIndex_t;
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
+#define	USE_PMLIGHT	1
+
 #define	REFENTITYNUM_BITS	11	// can't be increased without changing drawsurf bit packing
 #define	REFENTITYNUM_MASK	((1<<REFENTITYNUM_BITS) - 1)
 // the last N-bit number (2^REFENTITYNUM_BITS - 1) is reserved for the special world refentity,
