@@ -1347,9 +1347,6 @@ int R_LerpTag( orientation_t *tag, qhandle_t handle, int startFrame, int endFram
 		return qfalse;
 	}
 
-	if (frac < 0.0f) frac = 0.0f;
-    if (frac > 1.0f) frac = 1.0f;
-
 	frontLerp = frac;
 	backLerp = 1.0f - frac;
 
@@ -1358,10 +1355,6 @@ int R_LerpTag( orientation_t *tag, qhandle_t handle, int startFrame, int endFram
 		tag->axis[0][i] = start->axis[0][i] * backLerp +  end->axis[0][i] * frontLerp;
 		tag->axis[1][i] = start->axis[1][i] * backLerp +  end->axis[1][i] * frontLerp;
 		tag->axis[2][i] = start->axis[2][i] * backLerp +  end->axis[2][i] * frontLerp;
-
-		if (fabsf(tag->axis[0][i]) < 0.5f) tag->axis[0][i] = (tag->axis[0][i] < 0 ? -0.5f : 0.5f);
-        if (fabsf(tag->axis[1][i]) < 0.5f) tag->axis[1][i] = (tag->axis[1][i] < 0 ? -0.5f : 0.5f);
-        if (fabsf(tag->axis[2][i]) < 0.5f) tag->axis[2][i] = (tag->axis[2][i] < 0 ? -0.5f : 0.5f);
 	}
 	VectorNormalize( tag->axis[0] );
 	VectorNormalize( tag->axis[1] );
