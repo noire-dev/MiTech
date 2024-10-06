@@ -23,10 +23,10 @@ This is a modern engine created for Quake Sandbox.
 **MiTech features**:
 
 * Brush limit up to 524288
-* Entity limit up to 8192
-* Model limit up to 8192
-* Sound limit up to 8192
-* Brush model limit up to 8192
+* Entity limit up to 4096
+* Model limit up to 4096
+* Sound limit up to 4096
+* Brush model limit up to 4096
 * Cvar limit up to 16384
 * Players and bots limit up to 256
 * New weapon system with limit up to 8192
