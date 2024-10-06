@@ -913,7 +913,7 @@ void		R_Modellist_f (void);
 //====================================================
 
 #define	MAX_DRAWIMAGES			16384
-#define	MAX_SKINS				1024
+#define	MAX_SKINS				8192
 
 
 #define	MAX_DRAWSURFS			0x200000

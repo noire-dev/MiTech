@@ -77,7 +77,7 @@ int   		s_paintedtime; 		// sample PAIRS
 
 // MAX_SFX may be larger than MAX_SOUNDS because
 // of custom player sounds
-#define MAX_SFX			4096
+#define MAX_SFX			8192
 static sfx_t s_knownSfx[MAX_SFX];
 static int s_numSfx = 0;
 

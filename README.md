@@ -23,13 +23,18 @@ This is a modern engine created for Quake Sandbox.
 **MiTech features**:
 
 * Brush limit up to 524288
-* Entity limit up to 16384
+* Entity limit up to 8192
+* Model limit up to 8192
+* Sound limit up to 8192
+* Brush model limit up to 8192
 * Cvar limit up to 16384
 * Players and bots limit up to 256
-* Weapons limit up to 8192
+* New weapon system with limit up to 8192
 * Up to 80000000 polygons per scene
 * Up to 1000000 polygons per model
 * New addon system
+* Simple physics (QVM-side)
+* Map in UI background
 * Seamless change of QVM
 * Improved lighting (high resolution lightmaps and post-processing)
 * Render distance for entity (server-side)
@@ -45,7 +50,7 @@ Based on [Quake-III-Arena-Kenny-Edition](https://github.com/kennyalive/Quake-III
 * 4K textures support
 * High-quality per-pixel dynamic lighting
 * Merged lightmaps (atlases)
-* Smooth shader animations
+* Smooth shader animations with 64 frames
 * Rendering a huge number of entities
 
 Highly recommended to use on modern systems
@@ -57,7 +62,7 @@ Based on classic OpenGL renderers from [idq3](https://github.com/id-Software/Qua
 * 4K textures support
 * High-quality per-pixel dynamic lighting
 * Merged lightmaps (atlases)
-* Smooth shader animations
+* Smooth shader animations with 64 frames
 * Rendering a huge number of entities
 
 Performance is usually greater or equal to other opengl1 renderers

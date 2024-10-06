@@ -710,7 +710,7 @@ static const netField_t entityStateFields[] =
 { NETF(powerups), MAX_POWERUPS },
 { NETF(modelindex), 16 },
 { NETF(otherEntityNum2), GENTITYNUM_BITS },
-{ NETF(loopSound), 8 },
+{ NETF(loopSound), 16 },
 { NETF(generic1), 8 },
 { NETF(generic2), 8 },
 { NETF(generic3), 16 },
