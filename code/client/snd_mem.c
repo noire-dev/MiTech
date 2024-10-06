@@ -32,7 +32,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "snd_local.h"
 #include "snd_codec.h"
 
+#if defined(__i386__)
+#define DEF_COMSOUNDMEGS "8"
+#else
 #define DEF_COMSOUNDMEGS "256"
+#endif
 
 /*
 ===============================================================================
