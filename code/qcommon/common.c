@@ -106,6 +106,7 @@ cvar_t	*sv_paused;
 cvar_t  *sv_packetdelay;
 cvar_t	*com_sv_running;
 cvar_t	*cl_selectedmod;
+cvar_t	*cl_32bit;
 
 cvar_t	*com_cameraMode;
 #if defined(_WIN32) && defined(_DEBUG)
@@ -3836,6 +3837,11 @@ void Com_Init( char *commandLine ) {
 	Com_InitKeyCommands();
 	
 	cl_selectedmod = Cvar_Get("cl_selectedmod", "default", CVAR_ARCHIVE | CVAR_SERVERINFO);
+	#if defined(__i386__)
+	cl_32bit = Cvar_Get("cl_32bit", "1", CVAR_ARCHIVE | CVAR_SERVERINFO);
+	#else
+	cl_32bit = Cvar_Get("cl_32bit", "0", CVAR_ARCHIVE | CVAR_SERVERINFO);
+	#endif
 
 	FS_InitFilesystem();
 
