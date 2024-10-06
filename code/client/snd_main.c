@@ -410,11 +410,11 @@ void S_Init( void )
 
 	Com_Printf( "------ Initializing Sound ------\n" );
 
-	s_volume = Cvar_Get( "s_volume", "0.8", CVAR_ARCHIVE );
-	Cvar_CheckRange( s_volume, "0", "1", CV_FLOAT );
+	s_volume = Cvar_Get( "s_volume", "1.0", CVAR_ARCHIVE );
+	Cvar_CheckRange( s_volume, "0", "2", CV_FLOAT );
 	Cvar_SetDescription( s_volume, "Sets master volume for all game audio." );
-	s_musicVolume = Cvar_Get( "s_musicVolume", "0.25", CVAR_ARCHIVE );
-	Cvar_CheckRange( s_musicVolume, "0", "1", CV_FLOAT );
+	s_musicVolume = Cvar_Get( "s_musicVolume", "0.4", CVAR_ARCHIVE );
+	Cvar_CheckRange( s_musicVolume, "0", "2", CV_FLOAT );
 	Cvar_SetDescription( s_musicVolume, "Sets volume for in-game music only." );
 	s_doppler = Cvar_Get( "s_doppler", "1", CVAR_ARCHIVE_ND );
 	Cvar_CheckRange( s_doppler, "0", "1", CV_INTEGER );

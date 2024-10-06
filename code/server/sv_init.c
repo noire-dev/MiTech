@@ -512,7 +512,7 @@ void SV_SpawnServer( const char *mapname, qboolean killBots ) {
 #endif
 
 	// get latched value
-	sv_pure = Cvar_Get( "sv_pure", "1", CVAR_SYSTEMINFO | CVAR_LATCH );
+	sv_pure = Cvar_Get( "sv_pure", "0", CVAR_SYSTEMINFO | CVAR_LATCH );
 
 	// VMs can change latched cvars instantly which could cause side-effects in SV_UserMove()
 	sv.pure = sv_pure->integer;
@@ -756,10 +756,10 @@ void SV_Init( void )
 	Cvar_SetDescription( sv_rconPassword, "Password for remote server commands." );
 	sv_privatePassword = Cvar_Get ("sv_privatePassword", "", CVAR_TEMP );
 	Cvar_SetDescription( sv_privatePassword, "Set password for private clients to login with." );
-	sv_fps = Cvar_Get ("sv_fps", "20", CVAR_TEMP );
-	Cvar_CheckRange( sv_fps, "10", "125", CV_INTEGER );
+	sv_fps = Cvar_Get ("sv_fps", "60", CVAR_TEMP );
+	Cvar_CheckRange( sv_fps, "30", "999", CV_INTEGER );
 	Cvar_SetDescription( sv_fps, "Set the max frames per second the server sends the client." );
-	sv_timeout = Cvar_Get( "sv_timeout", "200", CVAR_TEMP );
+	sv_timeout = Cvar_Get( "sv_timeout", "999999", CVAR_TEMP );
 	Cvar_CheckRange( sv_timeout, "4", NULL, CV_INTEGER );
 	Cvar_SetDescription( sv_timeout, "Seconds without any message before automatic client disconnect." );
 	sv_zombietime = Cvar_Get( "sv_zombietime", "2", CVAR_TEMP );
