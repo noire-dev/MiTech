@@ -1294,9 +1294,9 @@ static void R_Register( void )
 	r_railSegmentLength = ri.Cvar_Get( "r_railSegmentLength", "32", CVAR_ARCHIVE );
 	ri.Cvar_SetDescription( r_railSegmentLength, "Length of segments in railgun trails." );
 
-	r_ambientScale = ri.Cvar_Get( "r_ambientScale", "0.6", CVAR_CHEAT );
+	r_ambientScale = ri.Cvar_Get( "r_ambientScale", "0.80", CVAR_CHEAT );
 	ri.Cvar_SetDescription( r_ambientScale, "Light grid ambient light scaling on entity models." );
-	r_directedScale = ri.Cvar_Get( "r_directedScale", "1", CVAR_CHEAT );
+	r_directedScale = ri.Cvar_Get( "r_directedScale", "0.45", CVAR_CHEAT );
 	ri.Cvar_SetDescription( r_directedScale, "Light grid direct light scaling on entity models." );
 
 	r_anaglyphMode = ri.Cvar_Get("r_anaglyphMode", "0", CVAR_ARCHIVE);

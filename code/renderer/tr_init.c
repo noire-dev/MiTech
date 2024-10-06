@@ -1585,11 +1585,11 @@ static void R_Register( void )
 	ri.Cvar_CheckRange( r_ext_multisample, "0", "8", CV_INTEGER );
 	ri.Cvar_SetDescription( r_ext_multisample, "For anti-aliasing geometry edges, valid values: 0|2|4|6|8. Requires \\r_fbo 1." );
 	ri.Cvar_SetGroup( r_ext_multisample, CVG_RENDERER );
-	r_hdr = ri.Cvar_Get( "r_hdr", "0", CVAR_ARCHIVE_ND );
+	r_hdr = ri.Cvar_Get( "r_hdr", "1", CVAR_ARCHIVE_ND );
 	ri.Cvar_SetDescription(r_hdr, "Enables high dynamic range frame buffer texture format. Requires \\r_fbo 1.\n -1: 4-bit, for testing purposes, heavy color banding, might not work on all systems\n  0: 8 bit, default, moderate color banding with multi-stage shaders\n  1: 16 bit, enhanced blending precision, no color banding, might decrease performance on AMD / Intel GPUs\n" );
 	ri.Cvar_SetGroup( r_hdr, CVG_RENDERER );
 	// bloom
-	r_bloom = ri.Cvar_Get( "r_bloom", "0", CVAR_ARCHIVE_ND );
+	r_bloom = ri.Cvar_Get( "r_bloom", "1", CVAR_ARCHIVE_ND );
 	r_bloom->flags &= ~CVAR_LATCH; // If we were running renderervk before, we need to remove latch
 	ri.Cvar_SetDescription(r_bloom, "Enables bloom post-processing effect. Requires \\r_fbo 1.");
 	r_bloom_threshold = ri.Cvar_Get( "r_bloom_threshold", "0.10", CVAR_ARCHIVE_ND );
@@ -1641,9 +1641,9 @@ static void R_Register( void )
 	r_railSegmentLength = ri.Cvar_Get( "r_railSegmentLength", "32", CVAR_ARCHIVE_ND );
 	ri.Cvar_SetDescription( r_railSegmentLength, "Length of segments in railgun trails." );
 
-	r_ambientScale = ri.Cvar_Get( "r_ambientScale", "0.6", CVAR_CHEAT );
+	r_ambientScale = ri.Cvar_Get( "r_ambientScale", "0.80", CVAR_CHEAT );
 	ri.Cvar_SetDescription( r_ambientScale, "Light grid ambient light scaling on entity models." );
-	r_directedScale = ri.Cvar_Get( "r_directedScale", "1", CVAR_CHEAT );
+	r_directedScale = ri.Cvar_Get( "r_directedScale", "0.45", CVAR_CHEAT );
 	ri.Cvar_SetDescription( r_directedScale, "Light grid direct light scaling on entity models." );
 
 	r_anaglyphMode = ri.Cvar_Get( "r_anaglyphMode", "0", CVAR_ARCHIVE_ND );
