@@ -1273,46 +1273,42 @@ R_CreateDefaultImage
 ==================
 */
 static void R_CreateDefaultImage( void ) {
-	int		x;
-	byte	data[DEFAULT_SIZE][DEFAULT_SIZE][4];
+    int     x, y;
+    byte    data[DEFAULT_SIZE][DEFAULT_SIZE][4];
 
-	if ( r_defaultImage->string[0] )
-	{
-		// build from format
-		if ( R_BuildDefaultImage( r_defaultImage->string ) )
-			return;
-		// load from external file
-		tr.defaultImage = R_FindImageFile( r_defaultImage->string, IMGFLAG_MIPMAP | IMGFLAG_PICMIP );
-		if ( tr.defaultImage )
-			return;
-	}
+    if ( r_defaultImage->string[0] )
+    {
+        // build from format
+        if ( R_BuildDefaultImage( r_defaultImage->string ) )
+            return;
+        // load from external file
+        tr.defaultImage = R_FindImageFile( r_defaultImage->string, IMGFLAG_MIPMAP | IMGFLAG_PICMIP );
+        if ( tr.defaultImage )
+            return;
+    }
 
-	// the default image will be a box, to allow you to see the mapping coordinates
-	Com_Memset( data, 32, sizeof( data ) );
-	for ( x = 0 ; x < DEFAULT_SIZE ; x++ ) {
-		data[0][x][0] =
-		data[0][x][1] =
-		data[0][x][2] =
-		data[0][x][3] = 255;
+    // Source Engine Hello
+    for ( y = 0; y < DEFAULT_SIZE; y++ ) {
+        for ( x = 0; x < DEFAULT_SIZE; x++ ) {
+            if ( ( (x / 8) % 2 ) ^ ( (y / 8) % 2 ) ) {
+                // Black pixels
+                data[y][x][0] = 0;    // R
+                data[y][x][1] = 0;    // G
+                data[y][x][2] = 0;    // B
+                data[y][x][3] = 255;  // Alpha
+            } else {
+                // Pink pixels
+                data[y][x][0] = 255;  // R
+                data[y][x][1] = 0;    // G
+                data[y][x][2] = 255;  // B
+                data[y][x][3] = 255;  // Alpha
+            }
+        }
+    }
 
-		data[x][0][0] =
-		data[x][0][1] =
-		data[x][0][2] =
-		data[x][0][3] = 255;
-
-		data[DEFAULT_SIZE-1][x][0] =
-		data[DEFAULT_SIZE-1][x][1] =
-		data[DEFAULT_SIZE-1][x][2] =
-		data[DEFAULT_SIZE-1][x][3] = 255;
-
-		data[x][DEFAULT_SIZE-1][0] =
-		data[x][DEFAULT_SIZE-1][1] =
-		data[x][DEFAULT_SIZE-1][2] =
-		data[x][DEFAULT_SIZE-1][3] = 255;
-	}
-
-	tr.defaultImage = R_CreateImage( "*default", NULL, (byte *)data, DEFAULT_SIZE, DEFAULT_SIZE, IMGFLAG_MIPMAP );
+    tr.defaultImage = R_CreateImage( "*default", NULL, (byte *)data, DEFAULT_SIZE, DEFAULT_SIZE, IMGFLAG_MIPMAP );
 }
+
 
 
 /*
