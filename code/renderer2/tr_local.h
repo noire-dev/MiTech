@@ -1284,7 +1284,7 @@ typedef struct model_s {
 } model_t;
 
 
-#define	MAX_MOD_KNOWN	8192
+#define	MAX_MOD_KNOWN	4096
 
 void		R_ModelInit (void);
 model_t		*R_GetModelByHandle( qhandle_t hModel );
@@ -1297,7 +1297,7 @@ void		R_Modellist_f (void);
 //====================================================
 
 #define	MAX_DRAWIMAGES			16384
-#define	MAX_SKINS				8192
+#define	MAX_SKINS				4096
 
 
 #define	MAX_DRAWSURFS			0x200000
