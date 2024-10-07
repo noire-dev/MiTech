@@ -40,8 +40,8 @@ const int demo_protocols[] = { 66, 67, OLD_PROTOCOL_VERSION, NEW_PROTOCOL_VERSIO
 
 #ifdef DEDICATED
     #if defined(__i386__)
-        #define MIN_COMHUNKMEGS    1023
-        #define DEF_COMHUNKMEGS    1023
+        #define MIN_COMHUNKMEGS    512
+        #define DEF_COMHUNKMEGS    512
     #else
         #define MIN_COMHUNKMEGS    512
         #define DEF_COMHUNKMEGS    512
