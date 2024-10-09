@@ -3971,8 +3971,8 @@ void CL_Init( void ) {
 	cl_reconnectArgs = Cvar_Get( "cl_reconnectArgs", "", CVAR_ARCHIVE_ND | CVAR_NOTABCOMPLETE );
 
 	// userinfo
-	Cvar_Get ("name", "UnnamedPlayer", CVAR_USERINFO | CVAR_ARCHIVE_ND );
-	Cvar_Get ("rate", "25000", CVAR_USERINFO | CVAR_ARCHIVE );
+	Cvar_Get ("name", "QSPlayer", CVAR_USERINFO | CVAR_ARCHIVE_ND );
+	Cvar_Get ("rate", "125000", CVAR_USERINFO | CVAR_ARCHIVE );
 	Cvar_Get ("snaps", "60", CVAR_USERINFO | CVAR_ARCHIVE );
 	Cvar_Get ("model", "beret/default", CVAR_USERINFO | CVAR_ARCHIVE_ND );
 	Cvar_Get ("headmodel", "beret/default", CVAR_USERINFO | CVAR_ARCHIVE_ND );
@@ -3980,8 +3980,8 @@ void CL_Init( void ) {
 	Cvar_Get ("team_headmodel", "beret/default", CVAR_USERINFO | CVAR_ARCHIVE_ND );
 //	Cvar_Get ("g_redTeam", "Stroggs", CVAR_SERVERINFO | CVAR_ARCHIVE);
 //	Cvar_Get ("g_blueTeam", "Pagans", CVAR_SERVERINFO | CVAR_ARCHIVE);
-	Cvar_Get ("color1", "4", CVAR_USERINFO | CVAR_ARCHIVE );
-	Cvar_Get ("color2", "5", CVAR_USERINFO | CVAR_ARCHIVE );
+	Cvar_Get ("color1", "1", CVAR_USERINFO | CVAR_ARCHIVE );
+	Cvar_Get ("color2", "1", CVAR_USERINFO | CVAR_ARCHIVE );
 	Cvar_Get ("handicap", "100", CVAR_USERINFO | CVAR_ARCHIVE_ND );
 //	Cvar_Get ("teamtask", "0", CVAR_USERINFO );
 	Cvar_Get ("sex", "male", CVAR_USERINFO | CVAR_ARCHIVE_ND );
