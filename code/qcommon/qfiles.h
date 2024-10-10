@@ -346,8 +346,8 @@ typedef struct {
 #define	LIGHTMAP_WIDTH		128
 #define	LIGHTMAP_HEIGHT		128
 
-#define MAX_WORLD_COORD		( 1048576 )
-#define MIN_WORLD_COORD		( -1048576 )
+#define MAX_WORLD_COORD		( 524288 )
+#define MIN_WORLD_COORD		( -524288 )
 #define WORLD_SIZE			( MAX_WORLD_COORD - MIN_WORLD_COORD )
 
 //=============================================================================
