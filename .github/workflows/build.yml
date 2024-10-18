@@ -153,18 +153,12 @@ jobs:
 
   update-release:
     if: ${{ github.event_name == 'release' }}
-    needs: [windows-msys, ubuntu-x86, ubuntu-arm, macos-x86]
+    needs: [windows-msys, ubuntu-x86, macos-x86]
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         include:
-#         - artifact_dir: linux-aarch64
-#           artifact_name: qsand_linux-aarch64.zip
-
-#         - artifact_dir: linux-armv7
-#           artifact_name: qsand_linux-armv7.zip
-
           - artifact_dir: linux-x86
             artifact_name: qsand_linux-x86.zip
 
@@ -172,11 +166,9 @@ jobs:
             artifact_name: qsand_linux-x86_64.zip
 
           - artifact_dir: windows-mingw-x86
-#           artifact_name: qsand_windows-mingw-x86.zip
             artifact_name: qsand_windows-x86.zip 
 
           - artifact_dir: windows-mingw-x86_64
-#           artifact_name: qsand_windows-mingw-x86_64.zip
             artifact_name: qsand_windows-x86_64.zip
 
           - artifact_dir: macos-x86_64
