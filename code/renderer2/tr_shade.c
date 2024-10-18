@@ -1377,7 +1377,7 @@ static void RB_IterateStagesGeneric( const shaderCommands_t *input )
 		//
 		// draw
 		//
-		R_DrawElements(input->numIndexes, input->indexes);
+		R_DrawElements(input->numIndexes, input->firstIndex);
 
 		// allow skipping out to show just lightmaps during development
 		if ( r_lightmap->integer && ( pStage->bundle[0].isLightmap || pStage->bundle[1].isLightmap ) )
