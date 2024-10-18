@@ -2999,7 +2999,7 @@ void RE_LoadWorldMap( const char *name ) {
 
 		if (tr.numCubemaps)
 		{
-			//R_AssignCubemapsToWorldSurfaces();
+			R_AssignCubemapsToWorldSurfaces();
 		}
 	}
 
