@@ -2679,17 +2679,6 @@ static void R_CreateDefaultImage( void ) {
     int     x, y;
     byte    data[DEFAULT_SIZE][DEFAULT_SIZE][4];
 
-    if ( r_defaultImage->string[0] )
-    {
-        // build from format
-        if ( R_BuildDefaultImage( r_defaultImage->string ) )
-            return;
-        // load from external file
-        tr.defaultImage = R_FindImageFile( r_defaultImage->string, IMGFLAG_MIPMAP | IMGFLAG_PICMIP );
-        if ( tr.defaultImage )
-            return;
-    }
-
     // Source Engine Hello
     for ( y = 0; y < DEFAULT_SIZE; y++ ) {
         for ( x = 0; x < DEFAULT_SIZE; x++ ) {
@@ -2709,7 +2698,7 @@ static void R_CreateDefaultImage( void ) {
         }
     }
 
-    tr.defaultImage = R_CreateImage( "*default", NULL, (byte *)data, DEFAULT_SIZE, DEFAULT_SIZE, IMGFLAG_MIPMAP );
+    tr.defaultImage = R_CreateImage( "*default", (byte *)data, DEFAULT_SIZE, DEFAULT_SIZE, IMGFLAG_MIPMAP, 0, 0 );
 }
 
 /*
