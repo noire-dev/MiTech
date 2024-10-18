@@ -165,7 +165,7 @@ static void R_BoxSurfaces_r(mnode_t *node, vec3_t mins, vec3_t maxs, surfaceType
 		// check if the surface has NOIMPACT or NOMARKS set
 		if ( ( surf->shader->surfaceFlags & ( SURF_NOIMPACT | SURF_NOMARKS ) )
 			|| ( surf->shader->contentFlags & CONTENTS_FOG ) ) {
-			*surfViewCount = tr.viewCount;
+			//*surfViewCount = tr.viewCount;
 			continue;
 		}
 		// extra check for surfaces to avoid list overflows
