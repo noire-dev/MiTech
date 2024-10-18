@@ -954,7 +954,7 @@ static void RB_FogPass( void ) {
 	} else {
 		GL_State( GLS_SRCBLEND_SRC_ALPHA | GLS_DSTBLEND_ONE_MINUS_SRC_ALPHA );
 	}
-	GLSL_SetUniformInt(sp, UNIFORM_ALPHATEST, 0);
+	GLSL_SetUniformInt(sp, UNIFORM_ALPHATEST, 1);
 
 	R_DrawElements(tess.numIndexes, tess.firstIndex);
 }
