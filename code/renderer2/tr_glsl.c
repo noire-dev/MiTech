@@ -1136,7 +1136,7 @@ void GLSL_InitGPUShaders(void)
 			if (r_cubeMapping->integer)
 			{
 				Q_strcat(extradefines, 1024, "#define USE_CUBEMAP\n");
-				if (r_cubeMapping->integer == 2)
+				if (r_cubeMapping->integer >= 2)
 					Q_strcat(extradefines, 1024, "#define USE_BOX_CUBEMAP_PARALLAX\n");
 			}
 			else if (r_deluxeSpecular->value > 0.000001f)

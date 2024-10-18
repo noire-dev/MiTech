@@ -2620,6 +2620,11 @@ static void R_AssignCubemapsToWorldSurfaces(void)
 			continue;
 		}
 
+if (!(surf->shader->surfaceFlags & SURF_CUBEMAP)) {
+    continue;
+}
+
+
 		surf->cubemapIndex = R_CubemapForPoint(surfOrigin);
 		//ri.Printf(PRINT_ALL, "surface %d has cubemap %d\n", i, surf->cubemapIndex);
 	}
@@ -2990,6 +2995,7 @@ void RE_LoadWorldMap( const char *name ) {
 		{
 			R_LoadCubemapEntities("misc_cubemap");
 		}
+
 
 		if (tr.numCubemaps)
 		{

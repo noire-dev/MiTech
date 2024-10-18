@@ -1183,7 +1183,7 @@ static void R_Register( void )
 
 	r_depthPrepass = ri.Cvar_Get( "r_depthPrepass", "1", CVAR_ARCHIVE );
 	ri.Cvar_SetDescription( r_depthPrepass, "Do a depth-only pass before rendering. Speeds up rendering in cases where advanced features are used. Required for r_sunShadows." );
-	r_ssao = ri.Cvar_Get( "r_ssao", "1", CVAR_LATCH | CVAR_ARCHIVE );
+	r_ssao = ri.Cvar_Get( "r_ssao", "0", CVAR_LATCH | CVAR_ARCHIVE );
 	ri.Cvar_SetDescription( r_ssao, "Enable screen-space ambient occlusion." );
 
 	r_normalMapping = ri.Cvar_Get( "r_normalMapping", "1", CVAR_ARCHIVE | CVAR_LATCH );

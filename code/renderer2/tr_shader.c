@@ -1712,7 +1712,8 @@ static const infoParm_t infoParms[] = {
 	{"pointlight",	0,	SURF_POINTLIGHT, 0 },	// sample lighting at vertexes
 	{"nolightmap",	0,	SURF_NOLIGHTMAP,0 },	// don't generate a lightmap
 	{"nodlight",	0,	SURF_NODLIGHT, 0 },		// don't ever add dynamic lights
-	{"dust",		0,	SURF_DUST, 0}			// leave a dust trail when walking on this surface
+	{"dust",		0,	SURF_DUST, 0},			// leave a dust trail when walking on this surface
+	{"usecubemap",	0,	SURF_CUBEMAP, 0}		// leave a dust trail when walking on this surface
 };
 
 
