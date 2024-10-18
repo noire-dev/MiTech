@@ -428,10 +428,12 @@ static void SV_AddEntitiesVisibleFromPoint( const vec3_t origin, clientSnapshot_
 		distanceSquared = VectorLengthSquared(dir);
 
 		// check if the entity is within the max view distance
+		if (sv_viewdistance->integer != 0){		//if viewdistance 0 drawdistance is infinite
 		if (distanceSquared > maxViewDistanceSquared) {
 			if (ent->s.eType != ET_PLAYER && ent->s.eType != ET_BEAM && ent->s.eType != ET_MOVER) {
 				continue;
 			}
+		}
 		}
 
 		// add it
