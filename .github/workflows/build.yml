@@ -12,7 +12,7 @@ jobs:
       matrix:
         arch: [x86, x86_64]
         cc: [gcc]
-        btype: [Release, Debug]
+        btype: [Release]
         include:
           - arch: x86
             msystem: MINGW32
@@ -24,9 +24,6 @@ jobs:
 
           - btype: Release
             rule: install
-
-          - btype: Debug
-            rule: debug
 
     defaults:
       run:
@@ -68,14 +65,10 @@ jobs:
       matrix:
         arch: [x86, x86_64]
         cc: [gcc]
-        btype: [Release, Debug]
+        btype: [Release]
         include:
           - btype: Release
             rule: install
-
-          - btype: Debug
-            if: ${{ github.event_name != 'release' }}
-            rule: debug
 
           - arch: x86
             use_sdl: USE_SDL=0
@@ -121,13 +114,10 @@ jobs:
       matrix:
         arch: [x86_64, aarch64]
         cc: [clang]
-        btype: [Release, Debug]
+        btype: [Release]
         include:
           - btype: Release
             rule: install
-
-          - btype: Debug
-            rule: debug
 
     steps:
 
