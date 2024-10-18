@@ -113,53 +113,6 @@ jobs:
         if-no-files-found: error
         retention-days: 5
 
-  ubuntu-arm:
-    name: ${{ matrix.btype }} Ubuntu [ARM] ${{ matrix.arch }}
-    runs-on: ubuntu-20.04
-    strategy:
-      fail-fast: false
-      matrix:
-        arch: [aarch64, armv7]
-        cc: [gcc]
-        btype: [Release, Debug]
-        include:
-          - btype: Release
-            rule: install
-
-          - btype: Debug
-            rule: debug
-
-    steps:
-
-    - uses: actions/checkout@v4
-      if: false
-      with:
-        submodules: recursive
-
-    - name: Build ${{ matrix.arch }}
-      #if: ${{ github.event_name != 'release' || matrix.btype != 'Debug' }} # skip Debug configuration in Release build
-      if: false
-      uses: uraimo/run-on-arch-action@v2
-      with:
-        arch: ${{ matrix.arch }}
-        distro: ubuntu20.04
-        githubToken: ${{ github.token }}
-        shell: /bin/sh
-        run: |
-          apt-get -qq update
-          apt-get install -y make gcc g++
-          apt-get -y install libcurl4-openssl-dev mesa-common-dev libxxf86dga-dev libxrandr-dev libxxf86vm-dev libasound-dev
-          make ${{ matrix.rule }} -j 8 ARCH=${{ matrix.arch }} CC=${{ matrix.cc }} DESTDIR=bin USE_SDL=0 USE_RENDERER_DLOPEN=0 RENDERER_DEFAULT=opengl2
-
-    - uses: actions/upload-artifact@v4
-      if: false
-      #if: matrix.cc == 'gcc' && matrix.btype == 'Release'
-      with:
-        name: linux-${{ matrix.arch }}
-        path: bin
-        if-no-files-found: error
-        retention-days: 5
-
   macos-x86:
     name: ${{ matrix.btype }} macOS ${{ matrix.arch }}
     runs-on: macos-latest
