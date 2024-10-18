@@ -2991,12 +2991,6 @@ void RE_LoadWorldMap( const char *name ) {
 			R_LoadCubemapEntities("misc_cubemap");
 		}
 
-		if (!tr.numCubemaps)
-		{
-			// use deathmatch spawn points as cubemaps
-			R_LoadCubemapEntities("info_player_deathmatch");
-		}
-
 		if (tr.numCubemaps)
 		{
 			R_AssignCubemapsToWorldSurfaces();
