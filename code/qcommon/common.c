@@ -106,7 +106,6 @@ cvar_t	*sv_paused;
 cvar_t  *sv_packetdelay;
 cvar_t	*com_sv_running;
 cvar_t	*cl_selectedmod;
-cvar_t *mt_texturepoint0;
 cvar_t	*cl_32bit;
 cvar_t	*cl_oslinux;
 
@@ -3839,8 +3838,6 @@ void Com_Init( char *commandLine ) {
 	Com_InitKeyCommands();
 	
 	cl_selectedmod = Cvar_Get("cl_selectedmod", "default", CVAR_ARCHIVE | CVAR_SERVERINFO);
-	mt_texturepoint0 = Cvar_Get("mt_texturepoint0", "", 0);
-
 	#if defined(__i386__)
 	cl_32bit = Cvar_Get("cl_32bit", "1", CVAR_ARCHIVE);
 	#else

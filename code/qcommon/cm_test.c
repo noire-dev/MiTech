@@ -262,7 +262,6 @@ int CM_PointContents( const vec3_t p, clipHandle_t model ) {
 			if ( d > b->sides[i].plane->dist ) {
 				break;
 			}
-			Cvar_Set(va("mt_texturepoint%i", i), cm.shaders[b->sides[i].shaderNum].shader);
 		}
 
 		if ( i == b->numsides ) {
