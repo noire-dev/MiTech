@@ -1021,6 +1021,7 @@ extern	cvar_t	*com_cameraMode;
 extern	cvar_t	*com_protocol;
 extern	qboolean com_protocolCompat;
 extern 	cvar_t	*cl_selectedmod;
+extern 	cvar_t	*mt_texturepoint;
 extern 	cvar_t	*cl_32bit;
 extern 	cvar_t	*cl_oslinux;
 

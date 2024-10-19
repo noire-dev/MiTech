@@ -787,6 +787,9 @@ static intptr_t CL_CgameSystemCalls( intptr_t *args ) {
 		VM_CHECKBOUNDS( cgvm, args[1], args[2] );
 		return CL_GetValue( VMA(1), args[2], VMA(3) );
 
+	case CG_CM_POINTSHADER:
+		return CM_PointShader( VMA(1), args[2] );
+
 	default:
 		Com_Error( ERR_DROP, "Bad cgame system trap: %ld", (long int) args[0] );
 	}

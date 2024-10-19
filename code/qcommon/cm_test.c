@@ -523,3 +523,70 @@ qboolean CM_BoundsIntersectPoint( const vec3_t mins, const vec3_t maxs, const ve
 
 	return qtrue;
 }
+
+int CM_PointShader(const vec3_t p, clipHandle_t model) {	//noire.dev 2024
+    int            leafnum;
+    int            i, k;
+    int            brushnum;
+    cLeaf_t        *leaf;
+    cbrush_t       *b;
+    int            contents;
+    float          d;
+    cmodel_t       *clipm;
+    float          minDistance = 65536;  // Variable to store the minimum distance
+    int            closest = -1;            // Index of the closest side
+
+    if (!cm.numNodes) {    // Map not loaded
+        return 0;
+    }
+
+    if (model) {
+        clipm = CM_ClipHandleToModel(model);
+        leaf = &clipm->leaf;
+    } else {
+        leafnum = CM_PointLeafnum_r(p, 0);
+        leaf = &cm.leafs[leafnum];
+    }
+
+    contents = 0;
+    for (k = 0; k < leaf->numLeafBrushes; k++) {
+        brushnum = cm.leafbrushes[leaf->firstLeafBrush + k];
+        b = &cm.brushes[brushnum];
+
+        if (!CM_BoundsIntersectPoint(b->bounds[0], b->bounds[1], p)) {
+            continue;  // Skip if the point does not intersect with the brush bounds
+        }
+
+        // Check if the point is inside the brush
+        for (i = 0; i < b->numsides; i++) {
+            d = DotProduct(p, b->sides[i].plane->normal);
+
+            // Calculate the distance from the point to the side
+            float distance = d - b->sides[i].plane->dist;
+
+            // If the point is outside the side, skip it
+            if (distance > 0) {
+                break;
+            }
+
+            // Track the closest side
+            if (fabs(distance) < minDistance) {
+                minDistance = fabs(distance);
+                closest = i;  // Index of the closest side
+            }
+        }
+
+        if (i == b->numsides) {
+            contents |= b->contents;  // Add the brush's contents if the point is inside
+        }
+    }
+
+	// Update the closest side index only if it was found
+	if (closest != -1) {
+ 	   Cvar_Set("mt_texturepoint", va("%s", cm.shaders[b->sides[i].shaderNum]));
+	}
+
+
+    return contents;  // Return the contents bitmask
+}
+
