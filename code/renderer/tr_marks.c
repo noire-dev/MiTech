@@ -464,7 +464,7 @@ Noire.dev - R_FindShaderInPoint
 ################
 */
 
-void R_FindShaderInPoint( int numPoints, const vec3_t *points, const vec3_t projection ) {
+int R_FindShaderInPoint( int numPoints, const vec3_t *points, const vec3_t projection ) {
 	int				numsurfaces;
 	int				i;
 	surfaceType_t	*surfaces[64];
@@ -481,7 +481,7 @@ void R_FindShaderInPoint( int numPoints, const vec3_t *points, const vec3_t proj
 	int				*indexes;
 
 	if (numPoints <= 0) {
-		return;
+		return 0;
 	}
 
 	//increment view count for double check prevention
@@ -518,6 +518,8 @@ void R_FindShaderInPoint( int numPoints, const vec3_t *points, const vec3_t proj
 
 	numsurfaces = 0;
 	R_BoxSurfaces_r(tr.world->nodes, mins, maxs, surfaces, 64, &numsurfaces, projectionDir);
+
+	return 1;
 }
 
 /*
