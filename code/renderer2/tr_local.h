@@ -334,8 +334,8 @@ typedef struct {
 } texModInfo_t;
 
 
-#define MAX_IMAGE_ANIMATIONS		24
-#define MAX_IMAGE_ANIMATIONS_VQ3	8
+#define MAX_IMAGE_ANIMATIONS		64
+#define MAX_IMAGE_ANIMATIONS_VQ3	64
 
 typedef struct {
 	image_t			*image[MAX_IMAGE_ANIMATIONS];
@@ -2325,7 +2325,7 @@ RENDERER BACK END COMMAND QUEUE
 =============================================================
 */
 
-#define	MAX_RENDER_COMMANDS	0x40000
+#define	MAX_RENDER_COMMANDS	0x80000
 
 typedef struct {
 	byte	cmds[MAX_RENDER_COMMANDS];
@@ -2443,8 +2443,8 @@ typedef enum {
 // these are sort of arbitrary limits.
 // the limits apply to the sum of all scenes in a frame --
 // the main view, all the 3D icons, etc
-#define	MAX_POLYS		600
-#define	MAX_POLYVERTS	3000
+#define	MAX_POLYS		65536
+#define	MAX_POLYVERTS	65536*2
 
 // all of the information needed by the back end must be
 // contained in a backEndData_t
