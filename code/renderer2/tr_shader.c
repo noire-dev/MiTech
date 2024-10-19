@@ -3212,12 +3212,16 @@ from the current global working shader
 =========================
 */
 static shader_t *FinishShader( void ) {
-	int stage;
-	qboolean		hasLightmapStage;
-	qboolean		vertexLightmap;
+	int			stage, i, n, m;
+	qboolean	hasLightmapStage;
+	qboolean	vertexLightmap;
+	qboolean	colorBlend;
+	qboolean	depthMask;
 
 	hasLightmapStage = qfalse;
 	vertexLightmap = qfalse;
+	colorBlend = qfalse;
+	depthMask = qfalse;
 
 	//
 	// set sky stuff appropriate
