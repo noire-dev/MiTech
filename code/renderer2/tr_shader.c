@@ -3396,7 +3396,7 @@ static shader_t *FinishShader( void ) {
 		}
 	}
 
-	//DetectNeeds();
+	DetectNeeds();
 
 	// fix alphaGen flags to avoid redundant comparisons in R_ComputeColors()
 	for ( i = 0; i < MAX_SHADER_STAGES; i++ ) {
