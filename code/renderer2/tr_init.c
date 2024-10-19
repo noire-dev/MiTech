@@ -1120,7 +1120,7 @@ static void R_Register( void )
 	r_ext_texture_float = ri.Cvar_Get( "r_ext_texture_float", "1", CVAR_ARCHIVE | CVAR_LATCH);
 	r_ext_framebuffer_multisample = ri.Cvar_Get( "r_ext_framebuffer_multisample", "0", CVAR_ARCHIVE | CVAR_LATCH);
 	ri.Cvar_SetDescription( r_ext_framebuffer_multisample, "For anti-aliasing geometry edges (FBO)." );
-	r_arb_seamless_cube_map = ri.Cvar_Get( "r_arb_seamless_cube_map", "1", CVAR_ARCHIVE | CVAR_LATCH);
+	r_arb_seamless_cube_map = ri.Cvar_Get( "r_arb_seamless_cube_map", "0", CVAR_ARCHIVE | CVAR_LATCH);
 	r_arb_vertex_array_object = ri.Cvar_Get( "r_arb_vertex_array_object", "1", CVAR_ARCHIVE | CVAR_LATCH);
 	r_ext_direct_state_access = ri.Cvar_Get("r_ext_direct_state_access", "1", CVAR_ARCHIVE | CVAR_LATCH);
 
@@ -1168,18 +1168,18 @@ static void R_Register( void )
 
 	r_toneMap = ri.Cvar_Get( "r_toneMap", "1", CVAR_ARCHIVE );
 	ri.Cvar_SetDescription( r_toneMap, "Enable tone mapping. Requires r_hdr and r_postProcess." );
-	r_forceToneMap = ri.Cvar_Get( "r_forceToneMap", "0", CVAR_ARCHIVE | CVAR_LATCH );
-	r_forceToneMapMin = ri.Cvar_Get( "r_forceToneMapMin", "-8.0", CVAR_ARCHIVE | CVAR_LATCH );
-	r_forceToneMapAvg = ri.Cvar_Get( "r_forceToneMapAvg", "-2.0", CVAR_ARCHIVE | CVAR_LATCH );
-	r_forceToneMapMax = ri.Cvar_Get( "r_forceToneMapMax", "0.0", CVAR_ARCHIVE | CVAR_LATCH );
+	r_forceToneMap = ri.Cvar_Get( "r_forceToneMap", "0", CVAR_ARCHIVE );
+	r_forceToneMapMin = ri.Cvar_Get( "r_forceToneMapMin", "-8.0", CVAR_ARCHIVE );
+	r_forceToneMapAvg = ri.Cvar_Get( "r_forceToneMapAvg", "-2.0", CVAR_ARCHIVE );
+	r_forceToneMapMax = ri.Cvar_Get( "r_forceToneMapMax", "0.0", CVAR_ARCHIVE );
 
 	r_autoExposure = ri.Cvar_Get( "r_autoExposure", "1", CVAR_ARCHIVE );
 	ri.Cvar_SetDescription( r_autoExposure, "Do automatic exposure based on scene brightness. Hardcoded to -2 to 2 on maps that don't specify otherwise. Requires r_hdr, r_postProcess, and r_toneMap." );
-	r_forceAutoExposure = ri.Cvar_Get( "r_forceAutoExposure", "0", CVAR_ARCHIVE | CVAR_LATCH );
-	r_forceAutoExposureMin = ri.Cvar_Get( "r_forceAutoExposureMin", "-2.0", CVAR_ARCHIVE | CVAR_LATCH );
-	r_forceAutoExposureMax = ri.Cvar_Get( "r_forceAutoExposureMax", "2.0", CVAR_ARCHIVE | CVAR_LATCH );
+	r_forceAutoExposure = ri.Cvar_Get( "r_forceAutoExposure", "0", CVAR_ARCHIVE );
+	r_forceAutoExposureMin = ri.Cvar_Get( "r_forceAutoExposureMin", "-2.0", CVAR_ARCHIVE );
+	r_forceAutoExposureMax = ri.Cvar_Get( "r_forceAutoExposureMax", "2.0", CVAR_ARCHIVE );
 
-	r_cameraExposure = ri.Cvar_Get( "r_cameraExposure", "1", CVAR_ARCHIVE | CVAR_LATCH );
+	r_cameraExposure = ri.Cvar_Get( "r_cameraExposure", "1", CVAR_ARCHIVE );
 
 	r_depthPrepass = ri.Cvar_Get( "r_depthPrepass", "1", CVAR_ARCHIVE );
 	ri.Cvar_SetDescription( r_depthPrepass, "Do a depth-only pass before rendering. Speeds up rendering in cases where advanced features are used. Required for r_sunShadows." );
@@ -1209,7 +1209,7 @@ static void R_Register( void )
 	r_baseSpecular = ri.Cvar_Get( "r_baseSpecular", "0.00", CVAR_ARCHIVE | CVAR_LATCH );
 	r_baseGloss = ri.Cvar_Get( "r_baseGloss", "0.00", CVAR_ARCHIVE | CVAR_LATCH );
 	r_glossType = ri.Cvar_Get("r_glossType", "1", CVAR_ARCHIVE | CVAR_LATCH);
-	r_dlightMode = ri.Cvar_Get( "r_dlightMode", "0", CVAR_ARCHIVE | CVAR_LATCH );
+	r_dlightMode = ri.Cvar_Get( "r_dlightMode", "2", CVAR_ARCHIVE | CVAR_LATCH );
 	ri.Cvar_SetDescription( r_dlightMode, "Dynamic light mode:\n 0: VQ3 'fake' dynamic lights\n 1: High-quality per-pixel dynamic lights, slightly faster than VQ3's on modern hardware\n 2: Same as 1 but applies to all MD3 models too" );
 	r_pshadowDist = ri.Cvar_Get( "r_pshadowDist", "128", CVAR_ARCHIVE );
 	r_mergeLightmaps = ri.Cvar_Get( "r_mergeLightmaps", "1", CVAR_ARCHIVE | CVAR_LATCH );
@@ -1219,9 +1219,9 @@ static void R_Register( void )
 	r_imageUpsampleType = ri.Cvar_Get( "r_imageUpsampleType", "1", CVAR_ARCHIVE | CVAR_LATCH );
 	r_genNormalMaps = ri.Cvar_Get( "r_genNormalMaps", "0", CVAR_ARCHIVE | CVAR_LATCH );
 
-	r_forceSun = ri.Cvar_Get( "r_forceSun", "1", CVAR_ARCHIVE | CVAR_LATCH );
-	r_forceSunLightScale = ri.Cvar_Get( "r_forceSunLightScale", "1.0", CVAR_ARCHIVE | CVAR_LATCH );
-	r_forceSunAmbientScale = ri.Cvar_Get( "r_forceSunAmbientScale", "0.5", CVAR_ARCHIVE | CVAR_LATCH );
+	r_forceSun = ri.Cvar_Get( "r_forceSun", "1", CVAR_ARCHIVE );
+	r_forceSunLightScale = ri.Cvar_Get( "r_forceSunLightScale", "1.0", CVAR_ARCHIVE );
+	r_forceSunAmbientScale = ri.Cvar_Get( "r_forceSunAmbientScale", "0.5", CVAR_ARCHIVE );
 	r_drawSunRays = ri.Cvar_Get( "r_drawSunRays", "1", CVAR_ARCHIVE | CVAR_LATCH );
 	r_sunlightMode = ri.Cvar_Get( "r_sunlightMode", "1", CVAR_ARCHIVE | CVAR_LATCH );
 
