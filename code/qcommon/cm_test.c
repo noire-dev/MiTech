@@ -232,7 +232,6 @@ int CM_PointContents( const vec3_t p, clipHandle_t model ) {
 	int			contents;
 	float		d;
 	cmodel_t	*clipm;
-	dshader_t	*shadertest;
 
 	if (!cm.numNodes) {	// map not loaded
 		return 0;
@@ -263,8 +262,7 @@ int CM_PointContents( const vec3_t p, clipHandle_t model ) {
 			if ( d > b->sides[i].plane->dist ) {
 				break;
 			}
-			shadertest = ShaderForShaderNum( b->sides[i].shaderNum, -3 );
-			Cvar_Set(va("mt_texturepoint%i", i), shadertest->shader);
+			Cvar_Set(va("mt_texturepoint%i", i), cm.shaders[b->sides[i].shaderNum].shader);
 		}
 
 		if ( i == b->numsides ) {
