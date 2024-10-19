@@ -471,6 +471,10 @@ typedef struct shader_s {
 
 	fogPass_t	fogPass;				// draw a blended pass, possibly with depth test equals
 
+	qboolean	needsNormal;			// not all shaders will need all data to be gathered
+	//qboolean	needsST1;
+	qboolean	needsST2;
+
 	int         vertexAttribs;          // not all shaders will need all data to be gathered
 
 	int			numDeforms;
