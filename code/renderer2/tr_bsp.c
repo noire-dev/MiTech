@@ -2620,9 +2620,9 @@ static void R_AssignCubemapsToWorldSurfaces(void)
 			continue;
 		}
 
-if (!(surf->shader->surfaceFlags & SURF_CUBEMAP)) {
-    continue;
-}
+		if (!(surf->shader->surfaceFlags & SURF_CUBEMAP)) {
+   			continue;
+		}
 
 
 		surf->cubemapIndex = R_CubemapForPoint(surfOrigin);
