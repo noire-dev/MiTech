@@ -3329,24 +3329,40 @@ static shader_t *FinishShader( void ) {
 				// we can't adjust this one correctly, so it won't be exactly correct in fog
 			}
 
-			// don't screw with sort order if this is a portal or environment
-			if ( shader.sort == SS_BAD ) {
-				// see through item, like a grill or grate
-				if ( pStage->stateBits & GLS_DEPTHMASK_TRUE ) {
-					shader.sort = SS_SEE_THROUGH;
-				} else {
-					shader.sort = SS_BLEND0;
-				}
-			}
+			colorBlend = qtrue;
 		}
-		
+
 		stage++;
 	}
 
 	// there are times when you will need to manually apply a sort to
 	// opaque alpha tested shaders that have later blend passes
 	if ( shader.sort == SS_BAD ) {
-		shader.sort = SS_OPAQUE;
+		if ( colorBlend ) {
+			// see through item, like a grill or grate
+			if ( depthMask ) {
+				shader.sort = SS_SEE_THROUGH;
+			} else {
+				shader.sort = SS_BLEND0;
+			}
+		} else {
+			shader.sort = SS_OPAQUE;
+		}
+	}
+
+	DetectNeeds();
+
+	// fix alphaGen flags to avoid redundant comparisons in R_ComputeColors()
+	for ( i = 0; i < MAX_SHADER_STAGES; i++ ) {
+		shaderStage_t *pStage = &stages[ i ];
+		if ( !pStage->active )
+			break;
+		if ( pStage->rgbGen == CGEN_IDENTITY && pStage->alphaGen == AGEN_IDENTITY )
+			pStage->alphaGen = AGEN_SKIP;
+		else if ( pStage->rgbGen == CGEN_CONST && pStage->alphaGen == AGEN_CONST )
+			pStage->alphaGen = AGEN_SKIP;
+		else if ( pStage->rgbGen == CGEN_VERTEX && pStage->alphaGen == AGEN_VERTEX )
+			pStage->alphaGen = AGEN_SKIP;
 	}
 
 	//
