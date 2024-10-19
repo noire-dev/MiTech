@@ -283,7 +283,7 @@ void R_MDRAddAnimSurfaces( trRefEntity_t *ent ) {
 		// we will add shadows even if the main object isn't visible in the view
 
 		if (!(shader->surfaceFlags & SURF_CUBEMAP)) {
-			cubemapIndex = -1; // Disable cubemapping
+			cubemapIndex = 0; // Disable cubemapping
 		}
 
 		// stencil shadows can't do personal models unless I polyhedron clip
