@@ -3203,7 +3203,7 @@ static shader_t *FinishShader( void ) {
 	if ( shader.sort <= SS_OPAQUE ) {
 		shader.fogPass = FP_EQUAL;
 	} else if ( shader.contentFlags & CONTENTS_FOG ) {
-		shader.fogPass = FP_EQUAL;
+		shader.fogPass = FP_LE;
 	}
 
 #ifdef USE_VULKAN

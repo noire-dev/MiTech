@@ -3380,8 +3380,14 @@ static shader_t *FinishShader( void ) {
 	FindLightingStages();
 
 	// fogonly shaders don't have any normal passes
-	if (stage == 0 && !shader.isSky)
+	if ( stage == 0 && !shader.isSky )
 		shader.sort = SS_FOG;
+
+	if ( shader.sort <= SS_OPAQUE ) {
+		shader.fogPass = FP_EQUAL;
+	} else if ( shader.contentFlags & CONTENTS_FOG ) {
+		shader.fogPass = FP_LE;
+	}
 
 	// determine which stage iterator function is appropriate
 	ComputeStageIteratorFunc();
