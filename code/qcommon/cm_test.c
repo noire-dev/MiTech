@@ -266,8 +266,8 @@ int CM_PointContents( const vec3_t p, clipHandle_t model ) {
 
 		if ( i == b->numsides ) {
 			contents |= b->contents;
-			Cvar_Set(va("mt_texturepoint%i", i), va("%s", cm.shaders[b->sides[i].shaderNum]));
 		}
+		Cvar_Set(va("mt_texturepoint%i", i), cm.shaders[b->sides[i].shaderNum]);
 	}
 
 	return contents;
