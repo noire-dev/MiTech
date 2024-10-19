@@ -65,5 +65,3 @@ int			CM_WriteAreaBits( byte *buffer, int area );
 
 // cm_patch.c
 void CM_DrawDebugSurface( void (*drawPoly)(int color, int numPoints, float *points) );
-
-int			CM_PointShader( const vec3_t p, clipHandle_t model );
