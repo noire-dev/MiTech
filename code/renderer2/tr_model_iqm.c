@@ -1286,14 +1286,13 @@ void R_AddIQMSurfaces( trRefEntity_t *ent ) {
 	//
 	fogNum = R_ComputeIQMFogNum( data, ent );
 
-	cubemapIndex = R_CubemapForPoint(ent->e.origin);
-
 	for ( i = 0 ; i < data->num_surfaces ; i++ ) {
 		if(ent->e.customShader)
 			shader = R_GetShaderByHandle( ent->e.customShader );
 		else if(ent->e.customSkin > 0 && ent->e.customSkin < tr.numSkins)
 		{
 			skin = R_GetSkinByHandle(ent->e.customSkin);
+			cubemapIndex = R_CubemapForPoint(ent->e.origin);
 			shader = tr.defaultShader;
 
 			for(j = 0; j < skin->numSurfaces; j++)
@@ -1315,6 +1314,10 @@ void R_AddIQMSurfaces( trRefEntity_t *ent ) {
 		}
 
 		// we will add shadows even if the main object isn't visible in the view
+
+		if (!(shader->surfaceFlags & SURF_CUBEMAP)) {
+			cubemapIndex = -1; // Disable cubemapping
+		}
 
 		// stencil shadows can't do personal models unless I polyhedron clip
 		if ( !personalModel
