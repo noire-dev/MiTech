@@ -481,7 +481,7 @@ void R_FindShaderInPoint( int numPoints, const vec3_t *points, const vec3_t proj
 	int				*indexes;
 
 	if (numPoints <= 0) {
-		return 0;
+		return;
 	}
 
 	//increment view count for double check prevention
