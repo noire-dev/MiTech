@@ -386,8 +386,14 @@ int R_MarkFragments( int numPoints, const vec3_t *points, const vec3_t projectio
 					}
 
 					VectorCopy(dv[1].xyz, clipPoints[0][0]);
+					R_VaoUnpackNormal(fNormal, dv[1].normal);
+					VectorMA(clipPoints[0][0], MARKER_OFFSET, fNormal, clipPoints[0][0]);
 					VectorCopy(dv[cv->width].xyz, clipPoints[0][1]);
+					R_VaoUnpackNormal(fNormal, dv[cv->width].normal);
+					VectorMA(clipPoints[0][1], MARKER_OFFSET, fNormal, clipPoints[0][1]);
 					VectorCopy(dv[cv->width+1].xyz, clipPoints[0][2]);
+					R_VaoUnpackNormal(fNormal, dv[cv->width + 1].normal);
+					VectorMA(clipPoints[0][2], MARKER_OFFSET, fNormal, clipPoints[0][2]);
 					// check the normal of this triangle
 					VectorSubtract(clipPoints[0][0], clipPoints[0][1], v1);
 					VectorSubtract(clipPoints[0][2], clipPoints[0][1], v2);
