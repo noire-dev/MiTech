@@ -1393,6 +1393,23 @@ static qboolean ParseStage( shaderStage_t *stage, const char **text )
 		}
 	}
 
+	if ( depthMaskExplicit && shader.sort == SS_BAD ) {
+		// fix decals on q3wcp18 and other maps
+		if ( blendSrcBits == GLS_SRCBLEND_SRC_ALPHA && blendDstBits == GLS_DSTBLEND_ONE_MINUS_SRC_ALPHA /*&& stage->rgbGen == CGEN_VERTEX*/ ) {
+			if ( stage->alphaGen != AGEN_SKIP ) {
+				// q3wcp18 @ "textures/ctf_unified/floor_decal_blue" : AGEN_VERTEX, CGEN_VERTEX
+				depthMaskBits &= ~GLS_DEPTHMASK_TRUE;
+			} else {
+				// skip for q3wcp14 jumppads and similar
+				// q3wcp14 @ "textures/ctf_unified/bounce_blue" : AGEN_SKIP, CGEN_IDENTITY
+			}
+			shader.sort = shader.polygonOffset ? SS_DECAL : SS_OPAQUE + 0.01f;
+		} else if ( blendSrcBits == GLS_SRCBLEND_ZERO && blendDstBits == GLS_DSTBLEND_ONE_MINUS_SRC_COLOR && stage->rgbGen == CGEN_EXACT_VERTEX ) {
+			depthMaskBits &= ~GLS_DEPTHMASK_TRUE;
+			shader.sort = SS_SEE_THROUGH;
+		}
+	}
+
 	//
 	// compute state bits
 	//
@@ -1712,8 +1729,7 @@ static const infoParm_t infoParms[] = {
 	{"pointlight",	0,	SURF_POINTLIGHT, 0 },	// sample lighting at vertexes
 	{"nolightmap",	0,	SURF_NOLIGHTMAP,0 },	// don't generate a lightmap
 	{"nodlight",	0,	SURF_NODLIGHT, 0 },		// don't ever add dynamic lights
-	{"dust",		0,	SURF_DUST, 0},			// leave a dust trail when walking on this surface
-	{"usecubemap",	0,	SURF_CUBEMAP, 0}		// leave a dust trail when walking on this surface
+	{"dust",		0,	SURF_DUST, 0}			// leave a dust trail when walking on this surface
 };
 
 
@@ -3203,48 +3219,6 @@ static void InitShader( const char *name, int lightmapIndex ) {
 	}
 }
 
-static void DetectNeeds( void )
-{
-	texCoordGen_t t1;
-	texCoordGen_t t2;
-	int i;
-
-	for ( i = 0; i < MAX_SHADER_STAGES; i++ )
-	{
-		if ( !stages[i].active )
-			break;
-
-		t1 = stages[i].bundle[0].tcGen;
-		t2 = stages[i].bundle[1].tcGen;
-
-		if ( t1 == TCGEN_LIGHTMAP || t2 == TCGEN_LIGHTMAP )
-		{
-			shader.needsST2 = qtrue;
-		}
-		if ( t1 == TCGEN_ENVIRONMENT_MAPPED || t1 == TCGEN_ENVIRONMENT_MAPPED_FP )
-		{
-			shader.needsNormal = qtrue;
-		}
-		if ( t2 == TCGEN_ENVIRONMENT_MAPPED || t2 == TCGEN_ENVIRONMENT_MAPPED_FP )
-		{
-			shader.needsNormal = qtrue;
-		}
-		if ( stages[i].alphaGen == AGEN_LIGHTING_SPECULAR || stages[i].rgbGen == CGEN_LIGHTING_DIFFUSE )
-		{
-			shader.needsNormal = qtrue;
-		}
-	}
-	for ( i = 0; i < shader.numDeforms; i++ )
-	{
-		if ( shader.deforms[i].deformation == DEFORM_WAVE || shader.deforms[i].deformation == DEFORM_NORMALS || shader.deforms[i].deformation == DEFORM_BULGE ) {
-			shader.needsNormal = qtrue;
-		}
-		if ( shader.deforms[i].deformation >= DEFORM_TEXT0 && shader.deforms[i].deformation <= DEFORM_TEXT7 ) {
-			shader.needsNormal = qtrue;
-		}
-	}
-}
-
 /*
 =========================
 FinishShader
@@ -3254,16 +3228,12 @@ from the current global working shader
 =========================
 */
 static shader_t *FinishShader( void ) {
-	int			stage, i, n, m;
-	qboolean	hasLightmapStage;
-	qboolean	vertexLightmap;
-	qboolean	colorBlend;
-	qboolean	depthMask;
+	int stage;
+	qboolean		hasLightmapStage;
+	qboolean		vertexLightmap;
 
 	hasLightmapStage = qfalse;
 	vertexLightmap = qfalse;
-	colorBlend = qfalse;
-	depthMask = qfalse;
 
 	//
 	// set sky stuff appropriate
@@ -3375,40 +3345,24 @@ static shader_t *FinishShader( void ) {
 				// we can't adjust this one correctly, so it won't be exactly correct in fog
 			}
 
-			colorBlend = qtrue;
+			// don't screw with sort order if this is a portal or environment
+			if ( shader.sort == SS_BAD ) {
+				// see through item, like a grill or grate
+				if ( pStage->stateBits & GLS_DEPTHMASK_TRUE ) {
+					shader.sort = SS_SEE_THROUGH;
+				} else {
+					shader.sort = SS_BLEND0;
+				}
+			}
 		}
-
+		
 		stage++;
 	}
 
 	// there are times when you will need to manually apply a sort to
 	// opaque alpha tested shaders that have later blend passes
 	if ( shader.sort == SS_BAD ) {
-		if ( colorBlend ) {
-			// see through item, like a grill or grate
-			if ( depthMask ) {
-				shader.sort = SS_SEE_THROUGH;
-			} else {
-				shader.sort = SS_BLEND0;
-			}
-		} else {
-			shader.sort = SS_OPAQUE;
-		}
-	}
-
-	DetectNeeds();
-
-	// fix alphaGen flags to avoid redundant comparisons in R_ComputeColors()
-	for ( i = 0; i < MAX_SHADER_STAGES; i++ ) {
-		shaderStage_t *pStage = &stages[ i ];
-		if ( !pStage->active )
-			break;
-		if ( pStage->rgbGen == CGEN_IDENTITY && pStage->alphaGen == AGEN_IDENTITY )
-			pStage->alphaGen = AGEN_SKIP;
-		else if ( pStage->rgbGen == CGEN_CONST && pStage->alphaGen == AGEN_CONST )
-			pStage->alphaGen = AGEN_SKIP;
-		else if ( pStage->rgbGen == CGEN_VERTEX && pStage->alphaGen == AGEN_VERTEX )
-			pStage->alphaGen = AGEN_SKIP;
+		shader.sort = SS_OPAQUE;
 	}
 
 	//
@@ -3442,14 +3396,8 @@ static shader_t *FinishShader( void ) {
 	FindLightingStages();
 
 	// fogonly shaders don't have any normal passes
-	if ( stage == 0 && !shader.isSky )
+	if (stage == 0 && !shader.isSky)
 		shader.sort = SS_FOG;
-
-	if ( shader.sort <= SS_OPAQUE ) {
-		shader.fogPass = FP_EQUAL;
-	} else if ( shader.contentFlags & CONTENTS_FOG ) {
-		shader.fogPass = FP_LE;
-	}
 
 	// determine which stage iterator function is appropriate
 	ComputeStageIteratorFunc();
