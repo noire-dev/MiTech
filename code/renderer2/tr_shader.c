@@ -3001,9 +3001,15 @@ static shader_t *GeneratePermanentShader( void ) {
 
 	*newShader = shader;
 
+	if ( shader.sort <= SS_OPAQUE ) {
+		newShader->fogPass = FP_EQUAL;
+	} else if ( shader.contentFlags & CONTENTS_FOG ) {
+		newShader->fogPass = FP_LE;
+	}
+
 	tr.shaders[ tr.numShaders ] = newShader;
 	newShader->index = tr.numShaders;
-
+	
 	tr.sortedShaders[ tr.numShaders ] = newShader;
 	newShader->sortedIndex = tr.numShaders;
 
