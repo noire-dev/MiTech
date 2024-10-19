@@ -1393,23 +1393,6 @@ static qboolean ParseStage( shaderStage_t *stage, const char **text )
 		}
 	}
 
-	if ( depthMaskExplicit && shader.sort == SS_BAD ) {
-		// fix decals on q3wcp18 and other maps
-		if ( blendSrcBits == GLS_SRCBLEND_SRC_ALPHA && blendDstBits == GLS_DSTBLEND_ONE_MINUS_SRC_ALPHA /*&& stage->rgbGen == CGEN_VERTEX*/ ) {
-			if ( stage->alphaGen != AGEN_SKIP ) {
-				// q3wcp18 @ "textures/ctf_unified/floor_decal_blue" : AGEN_VERTEX, CGEN_VERTEX
-				depthMaskBits &= ~GLS_DEPTHMASK_TRUE;
-			} else {
-				// skip for q3wcp14 jumppads and similar
-				// q3wcp14 @ "textures/ctf_unified/bounce_blue" : AGEN_SKIP, CGEN_IDENTITY
-			}
-			shader.sort = shader.polygonOffset ? SS_DECAL : SS_OPAQUE + 0.01f;
-		} else if ( blendSrcBits == GLS_SRCBLEND_ZERO && blendDstBits == GLS_DSTBLEND_ONE_MINUS_SRC_COLOR && stage->rgbGen == CGEN_EXACT_VERTEX ) {
-			depthMaskBits &= ~GLS_DEPTHMASK_TRUE;
-			shader.sort = SS_SEE_THROUGH;
-		}
-	}
-
 	//
 	// compute state bits
 	//
@@ -1729,7 +1712,8 @@ static const infoParm_t infoParms[] = {
 	{"pointlight",	0,	SURF_POINTLIGHT, 0 },	// sample lighting at vertexes
 	{"nolightmap",	0,	SURF_NOLIGHTMAP,0 },	// don't generate a lightmap
 	{"nodlight",	0,	SURF_NODLIGHT, 0 },		// don't ever add dynamic lights
-	{"dust",		0,	SURF_DUST, 0}			// leave a dust trail when walking on this surface
+	{"dust",		0,	SURF_DUST, 0},			// leave a dust trail when walking on this surface
+	{"usecubemap",	0,	SURF_CUBEMAP, 0}		// leave a dust trail when walking on this surface
 };
 
 
