@@ -2000,7 +2000,6 @@ refexport_t *GetRefAPI ( int apiVersion, refimport_t *rimp ) {
 	re.EndFrame = RE_EndFrame;
 
 	re.MarkFragments = R_MarkFragments;
-	re.FindShaderInPoint = R_FindShaderInPoint;		//Noire.dev
 	re.LerpTag = R_LerpTag;
 	re.ModelBounds = R_ModelBounds;
 
