@@ -3201,7 +3201,7 @@ static shader_t *FinishShader( void ) {
 		shader.sort = SS_FOG;
 
 	if ( shader.sort <= SS_OPAQUE ) {
-		shader.fogPass = FP_EQUAL;
+		shader.fogPass = FP_LE;
 	} else if ( shader.contentFlags & CONTENTS_FOG ) {
 		shader.fogPass = FP_LE;
 	}
