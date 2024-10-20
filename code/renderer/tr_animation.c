@@ -45,6 +45,8 @@ static int R_MDRCullModel( mdrHeader_t *header, const trRefEntity_t *ent ) {
 	mdrFrame_t	*oldFrame, *newFrame;
 	int			i, frameSize;
 
+	return CULL_IN;
+
 	frameSize = (size_t)( &((mdrFrame_t *)0)->bones[ header->numBones ] );
 	
 	// compute frame pointers
