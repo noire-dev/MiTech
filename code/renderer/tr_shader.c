@@ -644,6 +644,9 @@ static qboolean ParseStage( shaderStage_t *stage, const char **text )
 				if (!shader.noPicMip)
 					flags |= IMGFLAG_PICMIP;
 
+				if (!shader.noFilter)
+					flags |= IMGFLAG_NOFILTER;
+
 				if (shader.noLightScale)
 					flags |= IMGFLAG_NOLIGHTSCALE;
 
@@ -690,6 +693,9 @@ static qboolean ParseStage( shaderStage_t *stage, const char **text )
 			if (!shader.noPicMip)
 				flags |= IMGFLAG_PICMIP;
 
+			if (!shader.noFilter)
+				flags |= IMGFLAG_NOFILTER;
+
 			if (shader.noLightScale)
 				flags |= IMGFLAG_NOLIGHTSCALE;
 
@@ -733,6 +739,9 @@ static qboolean ParseStage( shaderStage_t *stage, const char **text )
 
 					if (!shader.noPicMip)
 						flags |= IMGFLAG_PICMIP;
+
+					if (!shader.noFilter)
+						flags |= IMGFLAG_NOFILTER;
 
 					if (shader.noLightScale)
 						flags |= IMGFLAG_NOLIGHTSCALE;
@@ -1894,6 +1903,12 @@ static qboolean ParseShader( const char **text )
 		else if ( !Q_stricmp( token, "nopicmip" ) )
 		{
 			shader.noPicMip = 1;
+			continue;
+		}
+		// no filter
+		else if ( !Q_stricmp( token, "nofilter" ) )
+		{
+			shader.noFilter = 1;
 			continue;
 		}
 		else if ( !Q_stricmp( token, "novlcollapse" ) && s_extendedShader )
