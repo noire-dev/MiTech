@@ -110,11 +110,6 @@ void GL_TextureMode( const char *string ) {
 	// change all the existing mipmap texture objects
 	for ( i = 0; i < tr.numImages; i++ ) {
 		img = tr.images[ i ];
-		if ( img->flags & IMGFLAG_NOFILTER ) {
-			GL_Bind( img );
-			qglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST );
-			qglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-		} else
 		if ( img->flags & IMGFLAG_MIPMAP ) {
 			GL_Bind( img );
 			qglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, gl_filter_min );
